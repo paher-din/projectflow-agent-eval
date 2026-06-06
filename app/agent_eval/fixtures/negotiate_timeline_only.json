@@ -1,0 +1,184 @@
+{
+  "id": "negotiate_timeline_only",
+  "title": "成员拒绝任务后的分工协调",
+  "module": "negotiate",
+  "entrypoint": "negotiate",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-12",
+    "current_datetime": "2026-06-12T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": ["backend", "ai_ml"],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "后端 API 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": ["frontend", "design"],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI 开发",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": ["backend", "testing"],
+        "available_hours_per_week": 8,
+        "role_preference": "backend",
+        "interests": "后端和数据",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "校园课程评价平台",
+      "idea": "一个让学生匿名评价课程的 Web 平台",
+      "deadline": "2026-07-20",
+      "deliverables": "Web 应用",
+      "direction_card": null,
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "核心功能开发",
+          "goal": "实现课程搜索和评价功能",
+          "start_date": "2026-06-08",
+          "end_date": "2026-07-01",
+          "deliverable": "可运行的 Web 应用",
+          "done_criteria": ["用户可搜索课程", "用户可提交评价"],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task-1",
+          "stage_id": "stage-1",
+          "title": "课程搜索后端 API",
+          "description": "实现课程搜索的 REST API",
+          "status": "not_started",
+          "priority": "P0",
+          "owner_user_id": "user-1",
+          "backup_owner_user_id": "user-3",
+          "due_date": "2026-06-20",
+          "estimated_hours": 20,
+          "dependency_ids": [],
+          "acceptance_criteria": [],
+          "can_cut": false,
+          "assignment_reason": "小林擅长后端开发"
+        },
+        {
+          "id": "task-2",
+          "stage_id": "stage-1",
+          "title": "课程搜索前端页面",
+          "description": "搜索框和结果列表展示",
+          "status": "not_started",
+          "priority": "P0",
+          "owner_user_id": "user-1",
+          "backup_owner_user_id": null,
+          "due_date": "2026-06-22",
+          "estimated_hours": 15,
+          "dependency_ids": ["task-1"],
+          "acceptance_criteria": [],
+          "can_cut": false,
+          "assignment_reason": "小林有前端经验"
+        },
+        {
+          "id": "task-3",
+          "stage_id": "stage-1",
+          "title": "评价提交后端 API",
+          "description": "评价提交接口",
+          "status": "not_started",
+          "priority": "P0",
+          "owner_user_id": "user-3",
+          "backup_owner_user_id": null,
+          "due_date": "2026-06-25",
+          "estimated_hours": 15,
+          "dependency_ids": [],
+          "acceptance_criteria": [],
+          "can_cut": false,
+          "assignment_reason": "小王擅长后端"
+        }
+      ],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [
+        {
+          "id": "prop-1",
+          "stage_id": "stage-1",
+          "task_id": "task-1",
+          "recommended_owner_user_id": "user-1",
+          "backup_owner_user_id": "user-3",
+          "status": "owner_confirmed"
+        },
+        {
+          "id": "prop-2",
+          "stage_id": "stage-1",
+          "task_id": "task-2",
+          "recommended_owner_user_id": "user-1",
+          "backup_owner_user_id": null,
+          "status": "negotiating"
+        },
+        {
+          "id": "prop-3",
+          "stage_id": "stage-1",
+          "task_id": "task-3",
+          "recommended_owner_user_id": "user-3",
+          "backup_owner_user_id": null,
+          "status": "owner_confirmed"
+        }
+      ],
+      "assignment_responses": [
+        {
+          "id": "resp-1",
+          "proposal_id": "prop-2",
+          "user_id": "user-1",
+          "response": "rejected",
+          "preferred_task_id": "task-1",
+          "reason": "前端不是我的强项，我更想专注后端 task-1"
+        }
+      ],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "只输出 timeline 交换建议，不创建通用 AgentProposal",
+    "建议涉及的用户和 task 来自现有 WorkspaceState",
+    "输出 swap_reasoning 说明为什么推荐这个交换",
+    "协商建议基于现有成员拒绝响应"
+  ],
+  "forbidden_behavior": [
+    "创建通用 AgentProposal（negotiate 只输出 timeline-only 事件）",
+    "编造不存在的成员、任务或提案",
+    "推荐不属于该 stage 的任务交换",
+    "忽略成员的拒绝理由"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.25,
+    "mvp_boundary": 0.15,
+    "actionability": 0.15,
+    "swap_reasoning": 0.2,
+    "timeline_only_persistence": 0.15,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "violates_mvp_boundary",
+    "negotiate_created_generic_proposal",
+    "missing_reason",
+    "empty_fallback"
+  ]
+}

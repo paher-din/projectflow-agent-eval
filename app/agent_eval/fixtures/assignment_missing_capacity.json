@@ -1,0 +1,125 @@
+{
+  "id": "assignment_missing_capacity",
+  "title": "成员可用时间不足",
+  "module": "assignment",
+  "entrypoint": "recommend-assignments",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Overloaded Team",
+    "current_date": "2026-06-10",
+    "current_datetime": "2026-06-10T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": ["backend", "frontend", "database"],
+        "available_hours_per_week": 4,
+        "role_preference": "backend",
+        "interests": "全栈开发",
+        "constraints": "这学期有 5 门专业课，只能周末抽时间"
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": ["frontend"],
+        "available_hours_per_week": 3,
+        "role_preference": "frontend",
+        "interests": "前端开发",
+        "constraints": "同时在准备考研"
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "课程评价平台",
+      "idea": "一个让学生匿名评价课程的 Web 平台",
+      "deadline": "2026-07-20",
+      "deliverables": "Web 应用",
+      "direction_card": null,
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "核心功能开发",
+          "goal": "实现课程搜索和评价功能",
+          "start_date": "2026-06-08",
+          "end_date": "2026-07-01",
+          "deliverable": "可运行的 Web 应用",
+          "done_criteria": ["用户可搜索课程", "用户可提交评价"],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task-1",
+          "stage_id": "stage-1",
+          "title": "课程搜索后端 API",
+          "description": "实现课程搜索的 REST API",
+          "status": "not_started",
+          "priority": "P0",
+          "owner_user_id": null,
+          "backup_owner_user_id": null,
+          "due_date": "2026-06-20",
+          "estimated_hours": 20,
+          "dependency_ids": [],
+          "acceptance_criteria": ["支持按课程名搜索"],
+          "can_cut": false,
+          "assignment_reason": null
+        },
+        {
+          "id": "task-2",
+          "stage_id": "stage-1",
+          "title": "课程搜索前端页面",
+          "description": "搜索框和结果列表展示",
+          "status": "not_started",
+          "priority": "P0",
+          "owner_user_id": null,
+          "backup_owner_user_id": null,
+          "due_date": "2026-06-22",
+          "estimated_hours": 15,
+          "dependency_ids": ["task-1"],
+          "acceptance_criteria": ["搜索框可输入关键词"],
+          "can_cut": false,
+          "assignment_reason": null
+        }
+      ],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "意识到成员可用时间不足",
+    "不把高工作量 P0 任务全部推给忙碌成员",
+    "给出风险提示",
+    "推荐合理分工或建议调整范围"
+  ],
+  "forbidden_behavior": [
+    "把所有 P0 任务都分配给最忙碌的成员",
+    "忽略 available_hours 的有限性",
+    "编造不存在的成员或资料",
+    "绕过 proposal 流程"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.25,
+    "mvp_boundary": 0.15,
+    "actionability": 0.15,
+    "member_fit": 0.2,
+    "availability_awareness": 0.15,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "violates_mvp_boundary",
+    "unsafe_persistence",
+    "missing_reason",
+    "empty_fallback"
+  ]
+}

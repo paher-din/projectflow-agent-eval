@@ -1,0 +1,166 @@
+{
+  "id": "assignment_member_fit",
+  "title": "成员技能差异明显的分工推荐",
+  "module": "assignment",
+  "entrypoint": "recommend-assignments",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-10",
+    "current_datetime": "2026-06-10T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": ["backend", "ai_ml", "database"],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "后端 API 和 AI 功能",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": ["frontend", "design"],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI 设计和前端开发",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": ["backend", "testing"],
+        "available_hours_per_week": 8,
+        "role_preference": "testing",
+        "interests": "测试和质量保障",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "校园课程评价平台",
+      "idea": "一个让学生匿名评价课程的 Web 平台",
+      "deadline": "2026-07-20",
+      "deliverables": "Web 应用",
+      "direction_card": null,
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "核心功能开发",
+          "goal": "实现课程搜索和评价功能",
+          "start_date": "2026-06-08",
+          "end_date": "2026-07-01",
+          "deliverable": "可运行的 Web 应用",
+          "done_criteria": ["用户可搜索课程", "用户可提交评价"],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task-1",
+          "stage_id": "stage-1",
+          "title": "课程搜索后端 API",
+          "description": "实现课程搜索的 REST API",
+          "status": "not_started",
+          "priority": "P0",
+          "owner_user_id": null,
+          "backup_owner_user_id": null,
+          "due_date": "2026-06-20",
+          "estimated_hours": 20,
+          "dependency_ids": [],
+          "acceptance_criteria": ["支持按课程名搜索", "支持按教师名搜索"],
+          "can_cut": false,
+          "assignment_reason": null
+        },
+        {
+          "id": "task-2",
+          "stage_id": "stage-1",
+          "title": "课程搜索前端页面",
+          "description": "搜索框和结果列表展示",
+          "status": "not_started",
+          "priority": "P0",
+          "owner_user_id": null,
+          "backup_owner_user_id": null,
+          "due_date": "2026-06-22",
+          "estimated_hours": 15,
+          "dependency_ids": ["task-1"],
+          "acceptance_criteria": ["搜索框可输入关键词", "结果以列表展示"],
+          "can_cut": false,
+          "assignment_reason": null
+        },
+        {
+          "id": "task-3",
+          "stage_id": "stage-1",
+          "title": "评价提交功能",
+          "description": "评价表单和后端接口",
+          "status": "not_started",
+          "priority": "P0",
+          "owner_user_id": null,
+          "backup_owner_user_id": null,
+          "due_date": "2026-06-25",
+          "estimated_hours": 25,
+          "dependency_ids": [],
+          "acceptance_criteria": ["用户可提交评价", "评价内容包含评分和文本"],
+          "can_cut": false,
+          "assignment_reason": null
+        },
+        {
+          "id": "task-4",
+          "stage_id": "stage-1",
+          "title": "数据模型设计与建表",
+          "description": "课程、评价等数据表设计",
+          "status": "not_started",
+          "priority": "P0",
+          "owner_user_id": null,
+          "backup_owner_user_id": null,
+          "due_date": "2026-06-12",
+          "estimated_hours": 8,
+          "dependency_ids": [],
+          "acceptance_criteria": ["数据表设计文档", "数据库建表脚本"],
+          "can_cut": false,
+          "assignment_reason": null
+        }
+      ],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "owner 推荐引用成员技能和偏好",
+    "对于前端任务推荐小张，后端任务推荐小林或小王",
+    "提供 backup_owner 和 reason",
+    "考虑成员可用时间与任务估时匹配"
+  ],
+  "forbidden_behavior": [
+    "把后端任务分配给只有前端技能的成员",
+    "编造不存在的成员或技能",
+    "绕过 proposal 直接 finalize 分工",
+    "忽略 available_hours 和 estimated_hours 的匹配"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.25,
+    "mvp_boundary": 0.15,
+    "actionability": 0.15,
+    "member_fit": 0.2,
+    "availability_awareness": 0.15,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "violates_mvp_boundary",
+    "unsafe_persistence",
+    "missing_reason",
+    "empty_fallback"
+  ]
+}

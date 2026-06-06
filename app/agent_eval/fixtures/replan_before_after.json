@@ -1,0 +1,171 @@
+{
+  "id": "replan_before_after",
+  "title": "截止期临近且 P0 延误",
+  "module": "replan",
+  "entrypoint": "replan",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-07-10",
+    "current_datetime": "2026-07-10T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": ["backend", "ai_ml"],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "后端 API 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": ["frontend"],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "前端开发",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "校园课程评价平台",
+      "idea": "一个让学生匿名评价课程的 Web 平台",
+      "deadline": "2026-07-20",
+      "deliverables": "Web 应用，包含课程搜索、评价提交、评价展示",
+      "direction_card": null,
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "核心功能开发",
+          "goal": "实现课程搜索和评价功能",
+          "start_date": "2026-06-08",
+          "end_date": "2026-07-20",
+          "deliverable": "可运行的 Web 应用",
+          "done_criteria": ["用户可搜索课程", "用户可提交评价"],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task-1",
+          "stage_id": "stage-1",
+          "title": "课程搜索后端 API",
+          "description": "实现课程搜索的 REST API",
+          "status": "in_progress",
+          "priority": "P0",
+          "owner_user_id": "user-1",
+          "backup_owner_user_id": null,
+          "due_date": "2026-07-15",
+          "estimated_hours": 20,
+          "dependency_ids": [],
+          "acceptance_criteria": ["支持按课程名搜索"],
+          "can_cut": false,
+          "assignment_reason": "小林擅长后端"
+        },
+        {
+          "id": "task-2",
+          "stage_id": "stage-1",
+          "title": "课程搜索前端页面",
+          "description": "搜索框和结果列表展示",
+          "status": "not_started",
+          "priority": "P0",
+          "owner_user_id": "user-2",
+          "backup_owner_user_id": null,
+          "due_date": "2026-07-14",
+          "estimated_hours": 15,
+          "dependency_ids": ["task-1"],
+          "acceptance_criteria": ["搜索框可输入关键词"],
+          "can_cut": false,
+          "assignment_reason": "小张擅长前端"
+        },
+        {
+          "id": "task-3",
+          "stage_id": "stage-1",
+          "title": "评价提交功能",
+          "description": "评价表单和后端接口",
+          "status": "done",
+          "priority": "P0",
+          "owner_user_id": "user-1",
+          "backup_owner_user_id": null,
+          "due_date": "2026-07-10",
+          "estimated_hours": 15,
+          "dependency_ids": [],
+          "acceptance_criteria": ["用户可提交评价"],
+          "can_cut": false,
+          "assignment_reason": "小林擅长后端"
+        },
+        {
+          "id": "task-4",
+          "stage_id": "stage-1",
+          "title": "课程评价展示页面",
+          "description": "展示课程评价结果",
+          "status": "not_started",
+          "priority": "P1",
+          "owner_user_id": "user-2",
+          "backup_owner_user_id": null,
+          "due_date": "2026-07-17",
+          "estimated_hours": 10,
+          "dependency_ids": ["task-3"],
+          "acceptance_criteria": ["展示课程评分和评价内容"],
+          "can_cut": true,
+          "assignment_reason": "小张擅长前端"
+        }
+      ],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "risks": [
+        {
+          "id": "risk-1",
+          "stage_id": "stage-1",
+          "type": "deadline",
+          "title": "核心搜索功能可能无法按期交付",
+          "description": "task-1 进度滞后，导致 task-2 无法开始",
+          "severity": "high",
+          "evidence": "距离 deadline 只有 10 天，但 P0 的 task-1 仍在进行中，task-2 还依赖 task-1 且尚未开始",
+          "suggestion": "考虑简化搜索方案或加人",
+          "status": "open"
+        }
+      ],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "输出 before/after 对比说明调整内容",
+    "说明调整的 impact",
+    "包含确认要求（requires_confirmation）",
+    "建议合理的范围裁剪或优先级调整",
+    "引用 current_date 和 deadline 做时间判断"
+  ],
+  "forbidden_behavior": [
+    "不做范围裁剪继续原计划",
+    "推荐超出 MVP 的功能",
+    "编造不存在的任务或状态",
+    "不要求确认（绕过 human confirmation）"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.2,
+    "mvp_boundary": 0.2,
+    "actionability": 0.15,
+    "before_after_quality": 0.2,
+    "impact_explanation": 0.15,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "violates_mvp_boundary",
+    "unsafe_persistence",
+    "missing_reason",
+    "empty_fallback"
+  ]
+}

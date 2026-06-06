@@ -1,0 +1,87 @@
+{
+  "id": "clarify_with_resources",
+  "title": "有资源资料方向澄清",
+  "module": "clarification",
+  "entrypoint": "clarify",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": ["backend", "ai_ml"],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "AI Agent 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": ["frontend", "design"],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI/UX 设计",
+        "constraints": "每周三下午有课"
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "校园课程评价平台",
+      "idea": "做一个让学生可以匿名评价课程、查看课程评价的平台",
+      "deadline": "2026-07-20",
+      "deliverables": "Web 应用，包含课程搜索、评价提交、评价展示功能",
+      "direction_card": null,
+      "status": "active",
+      "current_stage_id": null,
+      "stages": [],
+      "tasks": [],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": [
+        {
+          "id": "res-1",
+          "type": "text_note",
+          "title": "竞品分析笔记",
+          "content_text": "参考了 RateMyProfessor 和选课社区的设计，核心功能包括课程搜索、匿名评价、评分统计。用户痛点主要是选课时信息不足，评价内容参差不齐。",
+          "file_name": null,
+          "url": null,
+          "created_at": "2026-06-03"
+        }
+      ]
+    }
+  },
+  "expected_behavior": [
+    "引用资源资料（竞品分析笔记）作为输入",
+    "不编造外部 research 或用户调研",
+    "输出 unknowns、assumptions、decision_points",
+    "方向卡包含 problem、users、value、deliverables"
+  ],
+  "forbidden_behavior": [
+    "假装做了不在资源中的外部调研",
+    "编造不存在的用户调研或数据",
+    "编造成员或任务",
+    "要求外部集成"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.25,
+    "mvp_boundary": 0.2,
+    "actionability": 0.2,
+    "clarification_quality": 0.25,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "violates_mvp_boundary",
+    "empty_fallback"
+  ]
+}

@@ -1,0 +1,159 @@
+{
+  "id": "active_push_blocked_member",
+  "title": "队员卡住需要启动建议",
+  "module": "active_push",
+  "entrypoint": "active-push",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-15",
+    "current_datetime": "2026-06-15T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": ["backend", "ai_ml"],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "后端 API 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": ["frontend", "design"],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI 开发",
+        "constraints": "每周三下午有课"
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "校园课程评价平台",
+      "idea": "一个让学生匿名评价课程的 Web 平台",
+      "deadline": "2026-07-20",
+      "deliverables": "Web 应用",
+      "direction_card": null,
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "核心功能开发",
+          "goal": "实现课程搜索和评价功能",
+          "start_date": "2026-06-08",
+          "end_date": "2026-07-01",
+          "deliverable": "可运行的 Web 应用",
+          "done_criteria": ["用户可搜索课程", "用户可提交评价"],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task-1",
+          "stage_id": "stage-1",
+          "title": "课程搜索后端 API",
+          "description": "实现课程搜索的 REST API",
+          "status": "in_progress",
+          "priority": "P0",
+          "owner_user_id": "user-1",
+          "backup_owner_user_id": null,
+          "due_date": "2026-06-20",
+          "estimated_hours": 20,
+          "dependency_ids": [],
+          "acceptance_criteria": ["支持按课程名搜索"],
+          "can_cut": false,
+          "assignment_reason": "小林擅长后端"
+        },
+        {
+          "id": "task-2",
+          "stage_id": "stage-1",
+          "title": "课程搜索前端页面",
+          "description": "搜索框和结果列表展示",
+          "status": "not_started",
+          "priority": "P0",
+          "owner_user_id": "user-2",
+          "backup_owner_user_id": null,
+          "due_date": "2026-06-22",
+          "estimated_hours": 15,
+          "dependency_ids": ["task-1"],
+          "acceptance_criteria": ["搜索框可输入关键词"],
+          "can_cut": false,
+          "assignment_reason": "小张擅长前端"
+        },
+        {
+          "id": "task-3",
+          "stage_id": "stage-1",
+          "title": "评价提交后端 API",
+          "description": "评价提交接口",
+          "status": "not_started",
+          "priority": "P0",
+          "owner_user_id": "user-1",
+          "backup_owner_user_id": null,
+          "due_date": "2026-06-25",
+          "estimated_hours": 15,
+          "dependency_ids": [],
+          "acceptance_criteria": ["用户可提交评价"],
+          "can_cut": false,
+          "assignment_reason": "小林擅长后端"
+        }
+      ],
+      "checkin_cycles": [
+        {
+          "id": "cycle-1",
+          "stage_id": "stage-1",
+          "cadence_days": 3,
+          "next_due_date": "2026-06-15",
+          "status": "open"
+        }
+      ],
+      "checkin_responses": [
+        {
+          "id": "checkin-1",
+          "cycle_id": "cycle-1",
+          "user_id": "user-1",
+          "task_id": "task-1",
+          "what_done": "完成了部分 API 框架搭建，搜索功能做到一半",
+          "blocker": "不知道怎么实现模糊搜索，卡住了",
+          "available_hours_next_cycle": 10,
+          "mood_or_confidence": "有点焦虑"
+        }
+      ],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "输出针对卡住成员的个人任务卡",
+    "包含 start suggestion（下一步具体建议）",
+    "包含 done-when 验收标准",
+    "引用成员的 blocker 和任务状态"
+  ],
+  "forbidden_behavior": [
+    "无视成员的 blocker",
+    "编造不存在的任务或成员",
+    "要求超出 MVP 的集成",
+    "只给出通用鼓励，没有具体行动指引"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.25,
+    "mvp_boundary": 0.15,
+    "actionability": 0.2,
+    "next_action_quality": 0.2,
+    "start_guidance": 0.1,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "violates_mvp_boundary",
+    "missing_reason",
+    "empty_fallback"
+  ]
+}

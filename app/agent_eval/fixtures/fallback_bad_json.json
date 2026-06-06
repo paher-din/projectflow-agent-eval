@@ -1,0 +1,70 @@
+{
+  "id": "fallback_bad_json",
+  "title": "LLM 返回坏 JSON 或超时",
+  "module": "reliability",
+  "entrypoint": "clarify",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": ["backend"],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "后端开发",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "学习助手",
+      "idea": "一个 AI 学习规划工具",
+      "deadline": "2026-07-15",
+      "deliverables": "Web 应用",
+      "direction_card": null,
+      "status": "active",
+      "current_stage_id": null,
+      "stages": [],
+      "tasks": [],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "坏 JSON 触发 repair 或 retry",
+    "最终 fallback 输出非空、中文、可执行的保守建议",
+    "fallback 状态透明展示（不是假装成功）",
+    "fallback 内容包含针对当前状态的合理指引"
+  ],
+  "forbidden_behavior": [
+    "空 fallback 或纯英文 fallback",
+    "fallback 被标记为成功而非 fallback",
+    "编造不存在的实体",
+    "fallback 只是通用文案不针对项目状态"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.2,
+    "mvp_boundary": 0.15,
+    "actionability": 0.2,
+    "reliability": 0.25,
+    "language_quality": 0.1,
+    "explainability": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "violates_mvp_boundary",
+    "empty_fallback",
+    "unlabeled_fallback"
+  ]
+}

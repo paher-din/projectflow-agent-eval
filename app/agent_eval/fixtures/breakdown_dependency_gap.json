@@ -1,0 +1,115 @@
+{
+  "id": "breakdown_dependency_gap",
+  "title": "任务依赖信息不足",
+  "module": "breakdown",
+  "entrypoint": "breakdown",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": ["backend", "ai_ml"],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "AI Agent 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": ["frontend", "design"],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI/UX 设计",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": ["database", "backend"],
+        "available_hours_per_week": 8,
+        "role_preference": "backend",
+        "interests": "数据模型设计",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "校园课程评价平台",
+      "idea": "一个让学生匿名评价课程的 Web 平台",
+      "deadline": "2026-07-20",
+      "deliverables": "Web 应用",
+      "direction_card": {
+        "problem": "选课信息不足",
+        "users": "在校大学生",
+        "value": "提供真实课程评价信息",
+        "deliverables": ["课程搜索", "评价提交", "评价展示"],
+        "boundaries": [],
+        "risks": [],
+        "suggested_questions": [],
+        "assumptions": [],
+        "unknowns": ["内容审核机制不确定"],
+        "mvp_boundary": {
+          "must_have": ["课程搜索", "评价提交与展示"],
+          "defer": ["用户积分系统"],
+          "out_of_scope": ["移动端 App", "第三方登录"]
+        },
+        "decision_points": []
+      },
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "核心功能开发",
+          "goal": "实现课程搜索和评价功能",
+          "start_date": "2026-06-08",
+          "end_date": "2026-07-01",
+          "deliverable": "可运行的 Web 应用，包含课程搜索和评价提交",
+          "done_criteria": ["用户可搜索课程", "用户可提交评价"],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "输出合理的任务粒度（不产生过多过细的任务）",
+    "标记依赖不明确的项",
+    "标记可延后或可砍的任务",
+    "任务优先级合理"
+  ],
+  "forbidden_behavior": [
+    "生成超过 20 个任务的洪水式拆解",
+    "编造不存在的依赖关系",
+    "编造不存在的成员或资料",
+    "提前分工（不属于拆解职责）"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.2,
+    "mvp_boundary": 0.15,
+    "actionability": 0.2,
+    "task_granularity": 0.2,
+    "dependency_simplicity": 0.15,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "violates_mvp_boundary",
+    "empty_fallback"
+  ]
+}

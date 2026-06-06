@@ -1,0 +1,105 @@
+{
+  "id": "plan_with_current_date",
+  "title": "当前日期影响阶段周期",
+  "module": "planning",
+  "entrypoint": "plan",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": ["backend", "ai_ml"],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "AI Agent 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": ["frontend", "design"],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI/UX 设计",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": ["database", "backend"],
+        "available_hours_per_week": 8,
+        "role_preference": "backend",
+        "interests": "数据模型设计",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "校园课程评价平台",
+      "idea": "做一个让学生可以匿名评价课程、查看课程评价的平台",
+      "deadline": "2026-07-20",
+      "deliverables": "Web 应用，包含课程搜索、评价提交、评价展示功能",
+      "direction_card": {
+        "problem": "学生选课时信息不足",
+        "users": "在校大学生",
+        "value": "提供真实课程评价信息",
+        "deliverables": ["课程搜索", "评价提交", "评价展示"],
+        "boundaries": [],
+        "risks": [],
+        "suggested_questions": [],
+        "assumptions": ["目标用户为在校本科生", "评价内容可由学生自主提交"],
+        "unknowns": ["用户获取渠道", "内容审核机制"],
+        "mvp_boundary": {
+          "must_have": ["课程搜索", "评价提交与展示"],
+          "defer": ["用户积分系统"],
+          "out_of_scope": ["移动端 App", "第三方登录"]
+        },
+        "decision_points": ["是否允许匿名回复评价"]
+      },
+      "status": "active",
+      "current_stage_id": null,
+      "stages": [],
+      "tasks": [],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "阶段计划引用 current_date（2026-06-05）作为起点",
+    "阶段 end_date 不超过 deadline（2026-07-20）",
+    "输出至少 2 个阶段",
+    "每个阶段包含 goal、deliverable、done_criteria",
+    "阶段顺序合理，日期连续"
+  ],
+  "forbidden_behavior": [
+    "阶段 start_date 早于 current_date",
+    "阶段 end_date 晚于 deadline",
+    "使用错误的时间线（如忽略周末或可用时间）",
+    "编造不存在的成员或资源"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.25,
+    "mvp_boundary": 0.15,
+    "actionability": 0.15,
+    "stage_coherence": 0.2,
+    "deadline_awareness": 0.15,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "violates_mvp_boundary",
+    "date_miscalculation",
+    "empty_fallback"
+  ]
+}

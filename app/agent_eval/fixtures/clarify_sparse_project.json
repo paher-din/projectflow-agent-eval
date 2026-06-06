@@ -1,0 +1,196 @@
+{
+  "id": "clarify_sparse_project",
+  "title": "模糊项目输入下的方向澄清",
+  "module": "clarification",
+  "entrypoint": "clarify",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "backend",
+          "ai_ml"
+        ],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "AI Agent 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": [
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI/UX 设计",
+        "constraints": "每周三下午有课"
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "智能学习助手",
+      "idea": "做一个帮助学生规划学习时间、推荐学习资料的 AI 工具",
+      "deadline": "2026-07-15",
+      "deliverables": "一个可用的 Web 应用",
+      "direction_card": null,
+      "status": "active",
+      "current_stage_id": null,
+      "stages": [],
+      "tasks": [],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "识别项目信息不足，输出 unknowns 和 assumptions",
+    "给出 MVP 范围内的下一步澄清建议",
+    "建议结构包括 problem、users、value、deliverables",
+    "输出 decision_points 供团队决策"
+  ],
+  "forbidden_behavior": [
+    "假装已经完成外部调研",
+    "编造不存在的成员、任务或资料",
+    "直接生成完整生产级技术方案",
+    "要求超出 MVP 范围的集成（GitHub、飞书、日历等）"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.25,
+    "mvp_boundary": 0.2,
+    "actionability": 0.2,
+    "clarification_quality": 0.25,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "violates_mvp_boundary",
+    "empty_fallback"
+  ],
+  "assertions": [
+    {
+      "id": "clarify_has_unknowns",
+      "group": "state_grounding",
+      "severity": "major",
+      "evaluator": "deterministic_text",
+      "rule": "required_terms_present",
+      "required": [
+        "unknowns",
+        "assumptions"
+      ],
+      "failure_category": "context_missing"
+    },
+    {
+      "id": "clarify_no_desktop_scope",
+      "group": "mvp_boundary",
+      "severity": "hard",
+      "evaluator": "deterministic_text",
+      "rule": "forbidden_terms_absent",
+      "forbidden": [
+        "桌面端",
+        "electron",
+        "移动端 app",
+        "ios",
+        "android"
+      ],
+      "failure_category": "scope_creep"
+    },
+    {
+      "id": "clarify_no_external_integration",
+      "group": "mvp_boundary",
+      "severity": "hard",
+      "evaluator": "deterministic_text",
+      "rule": "forbidden_terms_absent",
+      "forbidden": [
+        "github",
+        "飞书",
+        "feishu",
+        "日历集成",
+        "第三方登录"
+      ],
+      "failure_category": "scope_creep"
+    },
+    {
+      "id": "clarify_current_time_used",
+      "group": "temporal_correctness",
+      "severity": "major",
+      "evaluator": "deterministic_date",
+      "rule": "current_time_present",
+      "failure_category": "date_time_error"
+    },
+    {
+      "id": "clarify_valid_schema",
+      "group": "output_contract",
+      "severity": "hard",
+      "evaluator": "schema",
+      "rule": "valid_json_contract",
+      "failure_category": "schema_failure"
+    },
+    {
+      "id": "clarify_proposal_shape",
+      "group": "output_contract",
+      "severity": "hard",
+      "evaluator": "schema",
+      "rule": "proposal_shape_valid",
+      "failure_category": "persistence_boundary_violation"
+    },
+    {
+      "id": "clarify_questions_prioritized",
+      "group": "actionability",
+      "severity": "major",
+      "evaluator": "deterministic_text",
+      "rule": "required_terms_present",
+      "required": [
+        "suggested_questions",
+        "decision_points"
+      ],
+      "failure_category": "weak_actionability"
+    },
+    {
+      "id": "clarify_no_invented_members",
+      "group": "state_grounding",
+      "severity": "hard",
+      "evaluator": "state_path",
+      "rule": "does_not_invent_members",
+      "failure_category": "hallucinated_entity"
+    },
+    {
+      "id": "clarify_correct_module",
+      "group": "trace",
+      "severity": "hard",
+      "evaluator": "trace",
+      "rule": "correct_module_chosen",
+      "expected": [
+        "clarify"
+      ],
+      "failure_category": "wrong_module_behavior"
+    },
+    {
+      "id": "clarify_problem_users_value",
+      "group": "actionability",
+      "severity": "major",
+      "evaluator": "deterministic_text",
+      "rule": "required_terms_present",
+      "required": [
+        "problem",
+        "users",
+        "value",
+        "deliverables"
+      ],
+      "failure_category": "weak_actionability"
+    }
+  ]
+}

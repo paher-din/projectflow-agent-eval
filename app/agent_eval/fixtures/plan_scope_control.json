@@ -1,0 +1,78 @@
+{
+  "id": "plan_scope_control",
+  "title": "超大范围产品的范围收敛",
+  "module": "planning",
+  "entrypoint": "plan",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Dream Builders",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小刘",
+        "skills": ["backend", "ai_ml"],
+        "available_hours_per_week": 12,
+        "role_preference": "backend",
+        "interests": "AI 应用开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小陈",
+        "skills": ["frontend"],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "Web 开发",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "全能校园平台",
+      "idea": "做一个集课程评价、二手交易、社团管理、校园论坛、课程表、校园导航于一体的超级校园 App，同时支持 Web 和移动端，对接学校教务系统获取课表数据",
+      "deadline": "2026-08-01",
+      "deliverables": "一个完整的校园生活平台",
+      "direction_card": null,
+      "status": "active",
+      "current_stage_id": null,
+      "stages": [],
+      "tasks": [],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "识别项目范围过大并建议收敛",
+    "阶段计划聚焦 MVP 可交付范围",
+    "不推荐 out-of-scope 功能集成",
+    "明确哪些功能应该延后或排除"
+  ],
+  "forbidden_behavior": [
+    "接受全部功能范围不做收敛",
+    "推荐跨平台移动端开发",
+    "推荐对接学校教务系统等外部集成",
+    "编造不存在的成员或资源"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.2,
+    "mvp_boundary": 0.25,
+    "actionability": 0.2,
+    "stage_coherence": 0.15,
+    "language_quality": 0.1,
+    "reliability": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "violates_mvp_boundary",
+    "empty_fallback"
+  ]
+}

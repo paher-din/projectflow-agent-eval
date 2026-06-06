@@ -1,0 +1,203 @@
+{
+  "id": "risk_checkin_blocker",
+  "title": "Check-in 暴露出 Blocker",
+  "module": "risk",
+  "entrypoint": "analyze-risk",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-18",
+    "current_datetime": "2026-06-18T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": ["backend", "ai_ml"],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "后端 API 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": ["frontend", "design"],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI 开发",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": ["testing", "documentation"],
+        "available_hours_per_week": 8,
+        "role_preference": "testing",
+        "interests": "测试和文档",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "校园课程评价平台",
+      "idea": "一个让学生匿名评价课程的 Web 平台",
+      "deadline": "2026-07-20",
+      "deliverables": "Web 应用，包含课程搜索、评价提交、评价展示",
+      "direction_card": null,
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "核心功能开发",
+          "goal": "实现课程搜索和评价功能",
+          "start_date": "2026-06-08",
+          "end_date": "2026-07-01",
+          "deliverable": "可运行的 Web 应用，包含课程搜索和评价提交",
+          "done_criteria": ["用户可搜索课程", "用户可提交评价"],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task-1",
+          "stage_id": "stage-1",
+          "title": "课程搜索后端 API",
+          "description": "实现课程搜索的 REST API",
+          "status": "in_progress",
+          "priority": "P0",
+          "owner_user_id": "user-1",
+          "backup_owner_user_id": null,
+          "due_date": "2026-06-20",
+          "estimated_hours": 20,
+          "dependency_ids": [],
+          "acceptance_criteria": ["支持按课程名搜索", "支持按教师名搜索"],
+          "can_cut": false,
+          "assignment_reason": "小林擅长后端开发"
+        },
+        {
+          "id": "task-2",
+          "stage_id": "stage-1",
+          "title": "课程搜索前端页面",
+          "description": "搜索框和结果列表展示",
+          "status": "not_started",
+          "priority": "P0",
+          "owner_user_id": "user-2",
+          "backup_owner_user_id": null,
+          "due_date": "2026-06-22",
+          "estimated_hours": 15,
+          "dependency_ids": ["task-1"],
+          "acceptance_criteria": ["搜索框可输入关键词", "结果以列表展示"],
+          "can_cut": false,
+          "assignment_reason": "小张擅长前端"
+        },
+        {
+          "id": "task-3",
+          "stage_id": "stage-1",
+          "title": "评价提交后端 API",
+          "description": "评价提交接口",
+          "status": "not_started",
+          "priority": "P1",
+          "owner_user_id": "user-1",
+          "backup_owner_user_id": null,
+          "due_date": "2026-06-25",
+          "estimated_hours": 15,
+          "dependency_ids": [],
+          "acceptance_criteria": ["用户可提交评价"],
+          "can_cut": false,
+          "assignment_reason": "小林擅长后端"
+        }
+      ],
+      "checkin_cycles": [
+        {
+          "id": "cycle-1",
+          "stage_id": "stage-1",
+          "cadence_days": 3,
+          "next_due_date": "2026-06-18",
+          "status": "open"
+        }
+      ],
+      "checkin_responses": [
+        {
+          "id": "checkin-1",
+          "cycle_id": "cycle-1",
+          "user_id": "user-1",
+          "task_id": "task-1",
+          "what_done": "课程搜索后端 API 框架搭建完成，但模糊搜索功能还没实现",
+          "blocker": "模糊搜索需要了解全文检索方案，不确定用哪种（SQLite FTS 还是 Elasticsearch），也担心 deadline 来不及",
+          "available_hours_next_cycle": 10,
+          "mood_or_confidence": "焦虑"
+        },
+        {
+          "id": "checkin-2",
+          "cycle_id": "cycle-1",
+          "user_id": "user-2",
+          "task_id": "task-2",
+          "what_done": "搜索前端页面还没开始，等待 task-1 的 API",
+          "blocker": "task-1 没完成，我无法开始前端的联调",
+          "available_hours_next_cycle": 8,
+          "mood_or_confidence": "正常"
+        }
+      ],
+      "assignment_proposals": [
+        {
+          "id": "prop-1",
+          "stage_id": "stage-1",
+          "task_id": "task-1",
+          "recommended_owner_user_id": "user-1",
+          "backup_owner_user_id": null,
+          "status": "finalized"
+        },
+        {
+          "id": "prop-2",
+          "stage_id": "stage-1",
+          "task_id": "task-2",
+          "recommended_owner_user_id": "user-2",
+          "backup_owner_user_id": null,
+          "status": "finalized"
+        },
+        {
+          "id": "prop-3",
+          "stage_id": "stage-1",
+          "task_id": "task-3",
+          "recommended_owner_user_id": "user-1",
+          "backup_owner_user_id": null,
+          "status": "finalized"
+        }
+      ],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "风险证据来自 check-in blocker、任务状态和 deadline",
+    "风险类型覆盖 deadline、dependency、workload",
+    "给出 severity 判断（有依据）",
+    "建议缓解措施"
+  ],
+  "forbidden_behavior": [
+    "风险判断没有引用具体证据",
+    "编造不存在的 check-in 或任务状态",
+    "忽略 task-1 和 task-2 的依赖链",
+    "给出过于笼统的缓解建议"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.25,
+    "mvp_boundary": 0.15,
+    "actionability": 0.15,
+    "evidence_quality": 0.2,
+    "severity_calibration": 0.15,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "violates_mvp_boundary",
+    "missing_reason",
+    "empty_fallback"
+  ]
+}
