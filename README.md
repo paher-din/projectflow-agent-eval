@@ -29,6 +29,25 @@ Copy-Item .env.example .env
 
 Edit `.env` locally with your provider keys. Do not commit `.env`.
 
+## CLI Toolkit
+
+After editable install, use the short CLI:
+
+```powershell
+pfae case list
+pfae run mock
+pfae report latest
+pfae diagnose latest
+```
+
+The compatibility command is also available:
+
+```powershell
+projectflow-agent-eval run mock
+```
+
+The lower-level runner module remains available for direct development use, but agents should prefer `pfae`.
+
 ## Run Offline Benchmark
 
 ```powershell

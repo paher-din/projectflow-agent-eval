@@ -21,7 +21,8 @@ dev = [
 ]
 
 [project.scripts]
-projectflow-agent-eval = "app.agent_eval.runner:main"
+pfae = "app.agent_eval.cli:main"
+projectflow-agent-eval = "app.agent_eval.cli:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

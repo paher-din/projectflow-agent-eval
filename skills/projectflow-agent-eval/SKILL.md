@@ -1,0 +1,29 @@
+---
+name: projectflow-agent-eval
+description: Use when running, inspecting, comparing, or diagnosing ProjectFlow AgentEval benchmark results through the `pfae` CLI.
+---
+
+# ProjectFlow AgentEval
+
+Use this skill when the user asks to run ProjectFlow AgentEval, benchmark the ProjectFlow agent, compare quality across runs, inspect failures, rerun failed cases, or turn AgentEval reports into repair guidance.
+
+## First Steps
+
+1. Prefer `pfae run mock` for fast local checks that do not need provider credentials.
+2. Use `pfae run real --model <model>` only when the environment is already configured.
+3. Use `pfae report latest` for a concise run summary.
+4. Use `pfae diagnose latest` before proposing fixes for benchmark failures.
+5. Use `pfae compare <baseline> <candidate>` for regression checks.
+
+## Safety Boundaries
+
+- Do not edit `.env`, keys, tokens, CI/CD configuration, or provider credentials.
+- Do not commit `output/`, caches, local virtual environments, or generated benchmark artifacts.
+- Treat deterministic hard failures as authoritative.
+- Treat LLM judge output as semantic evidence, not the sole source of hard failures.
+- Keep this benchmark independent from ProjectFlow product backend persistence.
+
+## References
+
+- Read `references/command-guide.md` for exact command shapes.
+- Read `references/report-interpretation.md` when explaining failures.
