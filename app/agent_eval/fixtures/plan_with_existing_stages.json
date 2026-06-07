@@ -1,0 +1,191 @@
+{
+  "id": "plan_with_existing_stages",
+  "title": "已有两阶段时的规划应尊重现有结构",
+  "module": "planning",
+  "entrypoint": "plan",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "backend",
+          "ai_ml"
+        ],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "AI Agent 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": [
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI/UX 设计",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": [
+          "database",
+          "backend"
+        ],
+        "available_hours_per_week": 8,
+        "role_preference": "backend",
+        "interests": "数据模型设计",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "校园课程评价平台",
+      "idea": "一个让学生匿名评价课程的 Web 平台",
+      "deadline": "2026-07-15",
+      "deliverables": "Web 应用",
+      "direction_card": {
+        "problem": "选课信息不足，学生无法做出明智选择",
+        "users": "在校大学生",
+        "value": "提供真实课程评价信息帮助选课决策",
+        "deliverables": [
+          "课程搜索",
+          "评价提交",
+          "评价展示"
+        ],
+        "boundaries": [],
+        "risks": [],
+        "suggested_questions": [
+          "你希望覆盖哪些院系的课程？"
+        ],
+        "assumptions": [],
+        "unknowns": [
+          "内容审核机制不确定"
+        ],
+        "mvp_boundary": {
+          "must_have": [
+            "课程搜索",
+            "评价提交与展示"
+          ],
+          "defer": [
+            "用户积分系统"
+          ],
+          "out_of_scope": [
+            "移动端 App",
+            "第三方登录"
+          ]
+        },
+        "decision_points": []
+      },
+      "status": "active",
+      "current_stage_id": "stage-2",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "核心功能开发",
+          "goal": "实现搜索和评价",
+          "start_date": "2026-06-01",
+          "end_date": "2026-06-20",
+          "deliverable": "搜索 + 评价功能",
+          "done_criteria": [
+            "搜索可用",
+            "评价可用"
+          ],
+          "status": "done",
+          "order_index": 0
+        },
+        {
+          "id": "stage-2",
+          "name": "优化与测试",
+          "goal": "性能优化和测试",
+          "start_date": "2026-06-21",
+          "end_date": "2026-07-10",
+          "deliverable": "测试通过的上线版本",
+          "done_criteria": [
+            "性能达标",
+            "测试覆盖率 > 70%"
+          ],
+          "status": "active",
+          "order_index": 1
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task-1",
+          "title": "搜索 API 实现",
+          "stage_id": "stage-1",
+          "status": "done",
+          "priority": "high",
+          "estimated_hours": 16,
+          "assignee_id": "user-1",
+          "depends_on": [],
+          "done_criteria": "API 可用",
+          "description": "搜索接口"
+        },
+        {
+          "id": "task-2",
+          "title": "评价页面实现",
+          "stage_id": "stage-1",
+          "status": "done",
+          "priority": "high",
+          "estimated_hours": 12,
+          "assignee_id": "user-2",
+          "depends_on": [],
+          "done_criteria": "页面可用",
+          "description": "评价表单"
+        },
+        {
+          "id": "task-3",
+          "title": "性能优化",
+          "stage_id": "stage-2",
+          "status": "in_progress",
+          "priority": "high",
+          "estimated_hours": 10,
+          "assignee_id": "user-1",
+          "depends_on": [],
+          "done_criteria": "响应时间 < 200ms",
+          "description": "数据库查询优化"
+        }
+      ],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "识别 stage-1 已完成，stage-2 正在进行中",
+    "不在 stage-1 上追加新阶段",
+    "基于 stage-2 的状态和剩余时间给出后续规划建议",
+    "如果建议新阶段，衔接现有阶段的时间线"
+  ],
+  "forbidden_behavior": [
+    "忽略已有阶段的完成状态",
+    "在 stage-1 上创建重叠的阶段",
+    "不引用已完成阶段的产出（搜索 API、评价页面）"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.3,
+    "mvp_boundary": 0.15,
+    "actionability": 0.15,
+    "stage_coherence": 0.2,
+    "deadline_awareness": 0.1,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "empty_fallback"
+  ]
+}

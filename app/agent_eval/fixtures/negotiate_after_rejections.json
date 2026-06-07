@@ -1,0 +1,200 @@
+{
+  "id": "negotiate_after_rejections",
+  "title": "两轮被拒后的协商不应重复相同建议",
+  "module": "negotiate",
+  "entrypoint": "negotiate",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "backend",
+          "ai_ml"
+        ],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "AI Agent 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": [
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI/UX 设计",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": [
+          "database",
+          "backend"
+        ],
+        "available_hours_per_week": 8,
+        "role_preference": "backend",
+        "interests": "数据模型设计",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "校园课程评价平台",
+      "idea": "一个让学生匿名评价课程的 Web 平台",
+      "deadline": "2026-07-15",
+      "deliverables": "Web 应用",
+      "direction_card": {
+        "problem": "选课信息不足，学生无法做出明智选择",
+        "users": "在校大学生",
+        "value": "提供真实课程评价信息帮助选课决策",
+        "deliverables": [
+          "课程搜索",
+          "评价提交",
+          "评价展示"
+        ],
+        "boundaries": [],
+        "risks": [],
+        "suggested_questions": [
+          "你希望覆盖哪些院系的课程？"
+        ],
+        "assumptions": [],
+        "unknowns": [
+          "内容审核机制不确定"
+        ],
+        "mvp_boundary": {
+          "must_have": [
+            "课程搜索",
+            "评价提交与展示"
+          ],
+          "defer": [
+            "用户积分系统"
+          ],
+          "out_of_scope": [
+            "移动端 App",
+            "第三方登录"
+          ]
+        },
+        "decision_points": []
+      },
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "核心功能开发",
+          "goal": "实现课程搜索和评价功能",
+          "start_date": "2026-06-01",
+          "end_date": "2026-07-01",
+          "deliverable": "可运行的 Web 应用",
+          "done_criteria": [
+            "用户可搜索课程",
+            "用户可提交评价"
+          ],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task-1",
+          "title": "实现课程搜索 API",
+          "stage_id": "stage-1",
+          "status": "in_progress",
+          "priority": "high",
+          "estimated_hours": 16,
+          "assignee_id": null,
+          "depends_on": [],
+          "done_criteria": "API 可用",
+          "description": "需要后端和数据库经验"
+        }
+      ],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [
+        {
+          "id": "proposal-1",
+          "task_id": "task-1",
+          "proposer_id": "user-1",
+          "assignee_id": "user-1",
+          "reason": "小林有后端经验",
+          "status": "rejected"
+        },
+        {
+          "id": "proposal-2",
+          "task_id": "task-1",
+          "proposer_id": "user-1",
+          "assignee_id": "user-3",
+          "reason": "小王也擅长数据库",
+          "status": "rejected"
+        }
+      ],
+      "assignment_responses": [
+        {
+          "proposal_id": "proposal-1",
+          "responder_id": "user-1",
+          "response": "reject",
+          "reason": "我这周后端任务已经排满"
+        },
+        {
+          "proposal_id": "proposal-2",
+          "responder_id": "user-3",
+          "response": "reject",
+          "reason": "我对搜索算法不熟，数据库只是基础 CRUD"
+        }
+      ],
+      "assignment_negotiations": [
+        {
+          "id": "neg-1",
+          "proposal_id": "proposal-1",
+          "from_user_id": "user-1",
+          "to_user_id": "user-1",
+          "message": "可以拆分后端任务吗？我先做 API 框架",
+          "created_at": "2026-06-15T10:00:00+08:00"
+        },
+        {
+          "id": "neg-2",
+          "proposal_id": "proposal-2",
+          "from_user_id": "user-3",
+          "to_user_id": "user-1",
+          "message": "搜索不是简单 CRUD，我承担不了",
+          "created_at": "2026-06-17T10:00:00+08:00"
+        }
+      ],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "识别前两轮提案都被拒，且拒绝理由不同（产能 vs 技能）",
+    "不重复提之前已被拒的方案",
+    "基于拒绝理由给出新的协商方向（拆任务、调整范围、引入外部帮助）",
+    "明确说明为什么新方案不同于前两次"
+  ],
+  "forbidden_behavior": [
+    "提出和 proposal-1 或 proposal-2 内容相同的方案",
+    "忽略拒绝理由中的关键信息（产能不足、技能不匹配）",
+    "强行分配而不协商"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.3,
+    "mvp_boundary": 0.1,
+    "actionability": 0.15,
+    "swap_reasoning": 0.15,
+    "participant_grounding": 0.2,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.75,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "empty_fallback"
+  ]
+}
