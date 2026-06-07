@@ -1,0 +1,165 @@
+{
+  "id": "plan_overlapping_stages",
+  "title": "已有日期重叠的阶段",
+  "module": "planning",
+  "entrypoint": "plan",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "backend",
+          "ai_ml"
+        ],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "AI Agent 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": [
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI/UX 设计",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": [
+          "database",
+          "backend"
+        ],
+        "available_hours_per_week": 8,
+        "role_preference": "backend",
+        "interests": "数据模型设计",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "智能学习助手",
+      "idea": "AI 学习规划工具",
+      "deadline": "2026-07-15",
+      "deliverables": "Web 应用",
+      "direction_card": {
+        "problem": "选课信息不足，学生无法做出明智选择",
+        "users": "在校大学生",
+        "value": "提供真实课程评价信息帮助选课决策",
+        "deliverables": [
+          "课程搜索",
+          "评价提交",
+          "评价展示"
+        ],
+        "boundaries": [],
+        "risks": [],
+        "suggested_questions": [
+          "你希望覆盖哪些院系的课程？"
+        ],
+        "assumptions": [],
+        "unknowns": [
+          "内容审核机制不确定"
+        ],
+        "mvp_boundary": {
+          "must_have": [
+            "课程搜索",
+            "评价提交与展示"
+          ],
+          "defer": [
+            "用户积分系统"
+          ],
+          "out_of_scope": [
+            "移动端 App",
+            "第三方登录"
+          ]
+        },
+        "decision_points": []
+      },
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "后端 API 开发",
+          "goal": "实现课程数据 API",
+          "start_date": "2026-06-08",
+          "end_date": "2026-06-25",
+          "deliverable": "REST API",
+          "done_criteria": [
+            "API 可调用"
+          ],
+          "status": "active",
+          "order_index": 0
+        },
+        {
+          "id": "stage-2",
+          "name": "前端页面开发",
+          "goal": "实现前端页面",
+          "start_date": "2026-06-10",
+          "end_date": "2026-06-20",
+          "deliverable": "前端页面",
+          "done_criteria": [
+            "页面可访问"
+          ],
+          "status": "active",
+          "order_index": 1
+        }
+      ],
+      "tasks": [],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "识别阶段日期重叠问题",
+    "建议调整阶段顺序或合并",
+    "不生成产生冲突的新阶段"
+  ],
+  "forbidden_behavior": [
+    "忽略已有阶段的日期冲突",
+    "生成与已有阶段功能重复的新阶段"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.2,
+    "mvp_boundary": 0.15,
+    "actionability": 0.2,
+    "stage_coherence": 0.25,
+    "deadline_awareness": 0.1,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "empty_fallback"
+  ],
+  "assertions": [
+    {
+      "id": "plan_overlap_no_duplicate",
+      "group": "stage_coherence",
+      "severity": "hard",
+      "evaluator": "deterministic_text",
+      "rule": "forbidden_terms_absent",
+      "forbidden": [
+        "重复",
+        "duplicate"
+      ],
+      "failure_category": "stage_conflict"
+    }
+  ]
+}

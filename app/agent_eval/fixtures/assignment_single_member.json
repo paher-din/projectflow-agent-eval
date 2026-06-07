@@ -1,0 +1,170 @@
+{
+  "id": "assignment_single_member",
+  "title": "单人团队的任务分配",
+  "module": "assignment",
+  "entrypoint": "recommend-assignments",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "backend",
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 20,
+        "role_preference": "fullstack",
+        "interests": "全栈开发",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "个人博客系统",
+      "idea": "一个简单的个人技术博客",
+      "deadline": "2026-07-01",
+      "deliverables": "可部署的博客网站",
+      "direction_card": {
+        "problem": "需要一个个人技术分享平台",
+        "users": "技术博客读者",
+        "value": "分享技术经验和思考",
+        "deliverables": [
+          "文章列表",
+          "文章详情",
+          "标签系统",
+          "RSS"
+        ],
+        "boundaries": [],
+        "risks": [],
+        "suggested_questions": [],
+        "assumptions": [],
+        "unknowns": [],
+        "mvp_boundary": {
+          "must_have": [
+            "文章列表",
+            "文章详情"
+          ],
+          "defer": [
+            "评论系统",
+            "全文搜索"
+          ],
+          "out_of_scope": [
+            "多用户",
+            "付费订阅"
+          ]
+        },
+        "decision_points": []
+      },
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "核心功能开发",
+          "goal": "实现课程搜索和评价功能",
+          "start_date": "2026-06-08",
+          "end_date": "2026-07-01",
+          "deliverable": "可运行的 Web 应用，包含课程搜索和评价提交",
+          "done_criteria": [
+            "用户可搜索课程",
+            "用户可提交评价"
+          ],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task-1",
+          "title": "搭建博客前端框架",
+          "stage_id": "stage-1",
+          "status": "todo",
+          "priority": "high",
+          "estimated_hours": 12,
+          "assignee_id": null,
+          "depends_on": [],
+          "done_criteria": "前端路由和布局就绪",
+          "description": "使用 Next.js 或 Nuxt 搭建前端"
+        },
+        {
+          "id": "task-2",
+          "title": "实现文章管理 API",
+          "stage_id": "stage-1",
+          "status": "todo",
+          "priority": "high",
+          "estimated_hours": 16,
+          "assignee_id": null,
+          "depends_on": [],
+          "done_criteria": "CRUD 接口完整可用",
+          "description": "实现文章的创建、编辑、发布接口"
+        },
+        {
+          "id": "task-3",
+          "title": "部署和 CI/CD",
+          "stage_id": "stage-1",
+          "status": "todo",
+          "priority": "medium",
+          "estimated_hours": 8,
+          "assignee_id": null,
+          "depends_on": [
+            "task-1",
+            "task-2"
+          ],
+          "done_criteria": "自动化部署流程运行正常",
+          "description": "配置 GitHub Actions 自动部署"
+        }
+      ],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "识别只有一名成员的情况",
+    "合理安排任务先后顺序",
+    "标注产能瓶颈（三个任务可能无法同时进行）",
+    "建议按优先级串行执行"
+  ],
+  "forbidden_behavior": [
+    "假装所有任务可以同时分配给同一人",
+    "编造不存在的成员来分担任务"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.2,
+    "mvp_boundary": 0.1,
+    "actionability": 0.2,
+    "member_fit": 0.15,
+    "availability_awareness": 0.25,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.75,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "empty_fallback"
+  ],
+  "assertions": [
+    {
+      "id": "assignment_single_warn_capacity",
+      "group": "availability",
+      "severity": "major",
+      "evaluator": "deterministic_text",
+      "rule": "required_terms_present",
+      "required": [
+        "hours",
+        "产能",
+        "capacity",
+        "串行"
+      ],
+      "failure_category": "capacity_ignored"
+    }
+  ]
+}

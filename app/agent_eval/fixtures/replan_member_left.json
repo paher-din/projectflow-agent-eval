@@ -1,0 +1,176 @@
+{
+  "id": "replan_member_left",
+  "title": "关键成员离开的重新规划",
+  "module": "replan",
+  "entrypoint": "replan",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 15,
+        "role_preference": "frontend",
+        "interests": "UI/UX",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": [
+          "frontend"
+        ],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "智能学习助手",
+      "idea": "AI 学习规划工具",
+      "deadline": "2026-07-15",
+      "deliverables": "Web 应用",
+      "direction_card": {
+        "problem": "选课信息不足，学生无法做出明智选择",
+        "users": "在校大学生",
+        "value": "提供真实课程评价信息帮助选课决策",
+        "deliverables": [
+          "课程搜索",
+          "评价提交",
+          "评价展示"
+        ],
+        "boundaries": [],
+        "risks": [],
+        "suggested_questions": [
+          "你希望覆盖哪些院系的课程？"
+        ],
+        "assumptions": [],
+        "unknowns": [
+          "内容审核机制不确定"
+        ],
+        "mvp_boundary": {
+          "must_have": [
+            "课程搜索",
+            "评价提交与展示"
+          ],
+          "defer": [
+            "用户积分系统"
+          ],
+          "out_of_scope": [
+            "移动端 App",
+            "第三方登录"
+          ]
+        },
+        "decision_points": []
+      },
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "后端开发",
+          "goal": "实现后端 API",
+          "start_date": "2026-06-08",
+          "end_date": "2026-07-01",
+          "deliverable": "后端 API",
+          "done_criteria": [
+            "API 可用"
+          ],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task-1",
+          "title": "实现搜索 API",
+          "stage_id": "stage-1",
+          "status": "in_progress",
+          "priority": "high",
+          "estimated_hours": 16,
+          "assignee_id": "user-3",
+          "depends_on": [],
+          "done_criteria": "API 可用",
+          "description": "需要后端和数据库技能"
+        },
+        {
+          "id": "task-2",
+          "title": "设计数据库 Schema",
+          "stage_id": "stage-1",
+          "status": "in_progress",
+          "priority": "high",
+          "estimated_hours": 8,
+          "assignee_id": "user-3",
+          "depends_on": [],
+          "done_criteria": "Schema 评审通过",
+          "description": "需要数据库设计经验"
+        }
+      ],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "user-3（小王）已不在成员列表中，但仍有任务分配给他",
+    "识别任务缺少负责人",
+    "建议将后端任务重新分配给有能力的成员或招募新人",
+    "调整阶段计划以反映人员变动"
+  ],
+  "forbidden_behavior": [
+    "忽略已离开成员的任务",
+    "假装 user-3 仍在团队中"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.25,
+    "mvp_boundary": 0.1,
+    "actionability": 0.15,
+    "before_after_quality": 0.2,
+    "confirmation_requirement": 0.2,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.75,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "empty_fallback"
+  ],
+  "assertions": [
+    {
+      "id": "replan_member_left_detected",
+      "group": "state_grounding",
+      "severity": "major",
+      "evaluator": "deterministic_text",
+      "rule": "required_terms_present",
+      "required": [
+        "user-3",
+        "小王",
+        "离开",
+        "left",
+        "缺失",
+        "missing"
+      ],
+      "failure_category": "state_blindness"
+    },
+    {
+      "id": "replan_member_left_no_invent",
+      "group": "state_grounding",
+      "severity": "major",
+      "evaluator": "state_path",
+      "rule": "does_not_invent_members",
+      "failure_category": "hallucinated_entity"
+    }
+  ]
+}

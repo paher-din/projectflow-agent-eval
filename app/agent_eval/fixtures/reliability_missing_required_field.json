@@ -1,0 +1,101 @@
+{
+  "id": "reliability_missing_required_field",
+  "title": "输出缺少必需字段的容错",
+  "module": "reliability",
+  "entrypoint": "clarify",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "backend",
+          "ai_ml"
+        ],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "AI Agent 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": [
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI/UX 设计",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": [
+          "database",
+          "backend"
+        ],
+        "available_hours_per_week": 8,
+        "role_preference": "backend",
+        "interests": "数据模型设计",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "智能学习助手",
+      "idea": "做一个帮助学生规划学习时间的 AI 工具",
+      "deadline": "2026-07-15",
+      "deliverables": "一个可用的 Web 应用",
+      "direction_card": null,
+      "status": "active",
+      "current_stage_id": null,
+      "stages": [],
+      "tasks": [],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "能够检测到输出缺少必需字段",
+    "触发 fallback 机制",
+    "fallback 输出不能为空"
+  ],
+  "forbidden_behavior": [
+    "传入空 fallback",
+    "忽略 schema 校验错误"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.2,
+    "mvp_boundary": 0.2,
+    "actionability": 0.2,
+    "reliability": 0.3,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.7,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "missing_status",
+    "empty_fallback"
+  ],
+  "assertions": [
+    {
+      "id": "reliability_schema_enforced",
+      "group": "output_contract",
+      "severity": "hard",
+      "evaluator": "schema",
+      "rule": "valid_json_contract",
+      "failure_category": "schema_failure"
+    }
+  ]
+}

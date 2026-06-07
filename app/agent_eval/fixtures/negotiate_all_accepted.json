@@ -1,0 +1,210 @@
+{
+  "id": "negotiate_all_accepted",
+  "title": "所有提案已被接受的协商",
+  "module": "negotiate",
+  "entrypoint": "negotiate",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "backend",
+          "ai_ml"
+        ],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "AI Agent 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": [
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI/UX 设计",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": [
+          "database",
+          "backend"
+        ],
+        "available_hours_per_week": 8,
+        "role_preference": "backend",
+        "interests": "数据模型设计",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "智能学习助手",
+      "idea": "AI 学习规划工具",
+      "deadline": "2026-07-15",
+      "deliverables": "Web 应用",
+      "direction_card": {
+        "problem": "选课信息不足，学生无法做出明智选择",
+        "users": "在校大学生",
+        "value": "提供真实课程评价信息帮助选课决策",
+        "deliverables": [
+          "课程搜索",
+          "评价提交",
+          "评价展示"
+        ],
+        "boundaries": [],
+        "risks": [],
+        "suggested_questions": [
+          "你希望覆盖哪些院系的课程？"
+        ],
+        "assumptions": [],
+        "unknowns": [
+          "内容审核机制不确定"
+        ],
+        "mvp_boundary": {
+          "must_have": [
+            "课程搜索",
+            "评价提交与展示"
+          ],
+          "defer": [
+            "用户积分系统"
+          ],
+          "out_of_scope": [
+            "移动端 App",
+            "第三方登录"
+          ]
+        },
+        "decision_points": []
+      },
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "核心功能开发",
+          "goal": "实现课程搜索和评价功能",
+          "start_date": "2026-06-08",
+          "end_date": "2026-07-01",
+          "deliverable": "可运行的 Web 应用，包含课程搜索和评价提交",
+          "done_criteria": [
+            "用户可搜索课程",
+            "用户可提交评价"
+          ],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task-1",
+          "title": "实现搜索 API",
+          "stage_id": "stage-1",
+          "status": "todo",
+          "priority": "high",
+          "estimated_hours": 16,
+          "assignee_id": null,
+          "depends_on": [],
+          "done_criteria": "API 可用",
+          "description": "课程搜索接口"
+        },
+        {
+          "id": "task-2",
+          "title": "实现评价提交页面",
+          "stage_id": "stage-1",
+          "status": "todo",
+          "priority": "high",
+          "estimated_hours": 12,
+          "assignee_id": null,
+          "depends_on": [],
+          "done_criteria": "页面可用",
+          "description": "评价表单和提交逻辑"
+        }
+      ],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [
+        {
+          "id": "proposal-1",
+          "task_id": "task-1",
+          "proposer_id": "user-1",
+          "assignee_id": "user-1",
+          "reason": "小林擅长后端，适合实现搜索 API",
+          "status": "accepted"
+        },
+        {
+          "id": "proposal-2",
+          "task_id": "task-2",
+          "proposer_id": "user-1",
+          "assignee_id": "user-2",
+          "reason": "小张擅长前端，适合实现评价页面",
+          "status": "accepted"
+        }
+      ],
+      "assignment_responses": [
+        {
+          "proposal_id": "proposal-1",
+          "responder_id": "user-1",
+          "response": "accept",
+          "reason": ""
+        },
+        {
+          "proposal_id": "proposal-2",
+          "responder_id": "user-2",
+          "response": "accept",
+          "reason": ""
+        }
+      ],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "识别所有提案已被接受",
+    "不发起不必要的重新协商",
+    "确认当前分配方案合理"
+  ],
+  "forbidden_behavior": [
+    "在全部已接受的情况下重新协商",
+    "编造新的冲突或问题"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.25,
+    "mvp_boundary": 0.1,
+    "actionability": 0.15,
+    "confirmation_safety": 0.2,
+    "participant_grounding": 0.2,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "empty_fallback"
+  ],
+  "assertions": [
+    {
+      "id": "negotiate_accepted_no_renegotiate",
+      "group": "confirmation_safety",
+      "severity": "hard",
+      "evaluator": "deterministic_text",
+      "rule": "forbidden_terms_absent",
+      "forbidden": [
+        "重新分配",
+        "reassign",
+        "swap",
+        "更换"
+      ],
+      "failure_category": "unnecessary_renegotiation"
+    }
+  ]
+}

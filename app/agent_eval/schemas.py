@@ -259,6 +259,10 @@ class RunConfig(BaseModel):
     semantic_judge_model: str = ""
     semantic_judge_base_url_host: str = ""
     semantic_judge_prompt_version: str = ""
+    # External ProjectFlow Agent source (set via --projectflow-root)
+    projectflow_source_path: str = ""
+    projectflow_git_commit: str = ""
+    agent_model: str = ""
 
 
 # ---------------------------------------------------------------------------

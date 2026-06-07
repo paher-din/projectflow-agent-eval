@@ -1,0 +1,195 @@
+{
+  "id": "negotiate_multi_member_conflict",
+  "title": "多人协商冲突场景",
+  "module": "negotiate",
+  "entrypoint": "negotiate",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "backend",
+          "ai_ml"
+        ],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "AI Agent 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": [
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI/UX 设计",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": [
+          "database",
+          "backend"
+        ],
+        "available_hours_per_week": 8,
+        "role_preference": "backend",
+        "interests": "数据模型设计",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "智能学习助手",
+      "idea": "AI 学习规划工具",
+      "deadline": "2026-07-15",
+      "deliverables": "Web 应用",
+      "direction_card": {
+        "problem": "选课信息不足，学生无法做出明智选择",
+        "users": "在校大学生",
+        "value": "提供真实课程评价信息帮助选课决策",
+        "deliverables": [
+          "课程搜索",
+          "评价提交",
+          "评价展示"
+        ],
+        "boundaries": [],
+        "risks": [],
+        "suggested_questions": [
+          "你希望覆盖哪些院系的课程？"
+        ],
+        "assumptions": [],
+        "unknowns": [
+          "内容审核机制不确定"
+        ],
+        "mvp_boundary": {
+          "must_have": [
+            "课程搜索",
+            "评价提交与展示"
+          ],
+          "defer": [
+            "用户积分系统"
+          ],
+          "out_of_scope": [
+            "移动端 App",
+            "第三方登录"
+          ]
+        },
+        "decision_points": []
+      },
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "核心功能开发",
+          "goal": "实现课程搜索和评价功能",
+          "start_date": "2026-06-08",
+          "end_date": "2026-07-01",
+          "deliverable": "可运行的 Web 应用，包含课程搜索和评价提交",
+          "done_criteria": [
+            "用户可搜索课程",
+            "用户可提交评价"
+          ],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task-1",
+          "title": "实现搜索 API",
+          "stage_id": "stage-1",
+          "status": "todo",
+          "priority": "high",
+          "estimated_hours": 16,
+          "assignee_id": null,
+          "depends_on": [],
+          "done_criteria": "API 可用",
+          "description": "课程搜索接口"
+        }
+      ],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [
+        {
+          "id": "proposal-1",
+          "task_id": "task-1",
+          "proposer_id": "user-1",
+          "assignee_id": "user-1",
+          "reason": "我有后端经验",
+          "status": "pending"
+        },
+        {
+          "id": "proposal-2",
+          "task_id": "task-1",
+          "proposer_id": "user-3",
+          "assignee_id": "user-3",
+          "reason": "我更擅长数据库相关",
+          "status": "pending"
+        }
+      ],
+      "assignment_responses": [],
+      "assignment_negotiations": [
+        {
+          "id": "neg-1",
+          "proposal_id": "proposal-1",
+          "from_user_id": "user-3",
+          "to_user_id": "user-1",
+          "message": "我数据库经验更多，这个任务更适合我",
+          "created_at": "2026-06-05T09:00:00+08:00"
+        }
+      ],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "识别多人对同一任务的竞争",
+    "基于技能匹配度给出建议",
+    "提出公平的协商方案",
+    "不偏袒任意一方"
+  ],
+  "forbidden_behavior": [
+    "忽略协商冲突直接拍板",
+    "编造技能来偏好某一方"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.2,
+    "mvp_boundary": 0.1,
+    "actionability": 0.15,
+    "confirmation_safety": 0.15,
+    "participant_grounding": 0.3,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "empty_fallback"
+  ],
+  "assertions": [
+    {
+      "id": "negotiate_multi_resolve_conflict",
+      "group": "participant_grounding",
+      "severity": "major",
+      "evaluator": "deterministic_text",
+      "rule": "required_terms_present",
+      "required": [
+        "协商",
+        "skill",
+        "匹配",
+        "proposal"
+      ],
+      "failure_category": "conflict_ignored"
+    }
+  ]
+}

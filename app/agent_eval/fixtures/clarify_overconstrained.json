@@ -1,0 +1,122 @@
+{
+  "id": "clarify_overconstrained",
+  "title": "不可能的截止日期与范围",
+  "module": "clarification",
+  "entrypoint": "clarify",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "backend",
+          "ai_ml"
+        ],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "AI Agent 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": [
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI/UX 设计",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": [
+          "database",
+          "backend"
+        ],
+        "available_hours_per_week": 8,
+        "role_preference": "backend",
+        "interests": "数据模型设计",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "全栈电商平台",
+      "idea": "做一个完整的多商家电商平台，包含商品管理、订单系统、支付集成、物流追踪、售后管理、商家仪表盘",
+      "deadline": "2026-06-15",
+      "deliverables": "完整可上线的多商家电商平台",
+      "direction_card": null,
+      "status": "active",
+      "current_stage_id": null,
+      "stages": [],
+      "tasks": [],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "识别截止日期与范围之间的不合理差距",
+    "输出 unknowns 标注时间约束",
+    "建议缩小 MVP 范围或延长截止日期",
+    "明确哪些功能必须砍掉或延后"
+  ],
+  "forbidden_behavior": [
+    "接受不可能的范围作为可行计划",
+    "编造超出 MVP 范围的技术方案",
+    "假装已经有了支付、物流等外部集成能力"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.25,
+    "mvp_boundary": 0.25,
+    "actionability": 0.15,
+    "clarification_quality": 0.25,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.75,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "empty_fallback"
+  ],
+  "assertions": [
+    {
+      "id": "clarify_overconstrained_flags_timeline",
+      "group": "temporal_correctness",
+      "severity": "major",
+      "evaluator": "deterministic_text",
+      "rule": "required_terms_present",
+      "required": [
+        "deadline",
+        "scope",
+        "MVP"
+      ],
+      "failure_category": "temporal_obliviousness"
+    },
+    {
+      "id": "clarify_overconstrained_no_full_stack",
+      "group": "mvp_boundary",
+      "severity": "hard",
+      "evaluator": "deterministic_text",
+      "rule": "forbidden_terms_absent",
+      "forbidden": [
+        "完整实现",
+        "全部功能",
+        "所有模块",
+        "all features"
+      ],
+      "failure_category": "scope_creep"
+    }
+  ]
+}

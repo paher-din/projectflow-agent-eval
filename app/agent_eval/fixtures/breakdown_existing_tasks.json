@@ -1,0 +1,182 @@
+{
+  "id": "breakdown_existing_tasks",
+  "title": "已有任务时的增量拆解",
+  "module": "breakdown",
+  "entrypoint": "breakdown",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "backend",
+          "ai_ml"
+        ],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "AI Agent 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": [
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI/UX 设计",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": [
+          "database",
+          "backend"
+        ],
+        "available_hours_per_week": 8,
+        "role_preference": "backend",
+        "interests": "数据模型设计",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "智能学习助手",
+      "idea": "AI 学习规划工具",
+      "deadline": "2026-08-01",
+      "deliverables": "Web 应用",
+      "direction_card": {
+        "problem": "选课信息不足，学生无法做出明智选择",
+        "users": "在校大学生",
+        "value": "提供真实课程评价信息帮助选课决策",
+        "deliverables": [
+          "课程搜索",
+          "评价提交",
+          "评价展示"
+        ],
+        "boundaries": [],
+        "risks": [],
+        "suggested_questions": [
+          "你希望覆盖哪些院系的课程？"
+        ],
+        "assumptions": [],
+        "unknowns": [
+          "内容审核机制不确定"
+        ],
+        "mvp_boundary": {
+          "must_have": [
+            "课程搜索",
+            "评价提交与展示"
+          ],
+          "defer": [
+            "用户积分系统"
+          ],
+          "out_of_scope": [
+            "移动端 App",
+            "第三方登录"
+          ]
+        },
+        "decision_points": []
+      },
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "核心功能开发",
+          "goal": "实现课程搜索和评价功能",
+          "start_date": "2026-06-08",
+          "end_date": "2026-07-01",
+          "deliverable": "可运行的 Web 应用，包含课程搜索和评价提交",
+          "done_criteria": [
+            "用户可搜索课程",
+            "用户可提交评价"
+          ],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task-1",
+          "title": "设计数据库 Schema",
+          "stage_id": "stage-1",
+          "status": "done",
+          "priority": "high",
+          "estimated_hours": 8,
+          "assignee_id": null,
+          "depends_on": [],
+          "done_criteria": "Schema 文档完成并评审通过",
+          "description": "设计课程、评价、用户等核心表结构"
+        },
+        {
+          "id": "task-2",
+          "title": "实现课程搜索 API",
+          "stage_id": "stage-1",
+          "status": "in_progress",
+          "priority": "high",
+          "estimated_hours": 16,
+          "assignee_id": null,
+          "depends_on": [
+            "task-1"
+          ],
+          "done_criteria": "API 返回正确搜索结果",
+          "description": "基于 Elasticsearch 或 SQL 实现搜索"
+        }
+      ],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "识别已有任务并避免重复",
+    "在已有任务基础上拆解剩余工作",
+    "新任务的依赖关系引用已有任务",
+    "不重新拆解已完成的任务"
+  ],
+  "forbidden_behavior": [
+    "创建与已有任务内容重复的新任务",
+    "忽略已有任务的完成状态",
+    "重新定义已有任务的依赖关系（除非明确需要调整）"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.25,
+    "mvp_boundary": 0.1,
+    "actionability": 0.2,
+    "task_granularity": 0.2,
+    "dependency_simplicity": 0.15,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "empty_fallback"
+  ],
+  "assertions": [
+    {
+      "id": "breakdown_existing_no_duplicate",
+      "group": "output_contract",
+      "severity": "major",
+      "evaluator": "deterministic_text",
+      "rule": "forbidden_terms_absent",
+      "forbidden": [
+        "task-1",
+        "task-2"
+      ],
+      "failure_category": "duplicate_output"
+    }
+  ]
+}

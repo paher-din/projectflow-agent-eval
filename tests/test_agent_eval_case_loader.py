@@ -153,12 +153,12 @@ class TestLoadFixtures:
             load_fixtures(tmp_fixtures_dir)
 
     def test_real_fixtures_directory(self):
-        """Load the actual fixture directory to verify all 12 fixtures load."""
+        """Load the actual fixture directory to verify all fixtures load."""
         fixtures_dir = Path(__file__).resolve().parent.parent / "app" / "agent_eval" / "fixtures"
         if not fixtures_dir.exists():
             pytest.skip("Fixtures directory not found")
         cases = load_fixtures(fixtures_dir)
-        assert len(cases) == 12
+        assert len(cases) >= 30  # 35+ fixtures
         assert cases[0].id < cases[-1].id  # sorted
 
 

@@ -22,6 +22,7 @@ def run_benchmark(
     cache_dir: str = str(DEFAULT_CACHE_DIR),
     no_cache: bool = False,
     run_ref: str = "",
+    projectflow_root: str = "",
 ) -> int:
     mode = "real" if action == "real" else "mock"
     selected_model = model or ("stub" if mode == "mock" else "")
@@ -50,6 +51,7 @@ def run_benchmark(
         semantic_guard_mode=semantic_guard,
         semantic_judge_model=semantic_judge_model,
         semantic_judge_base_url=semantic_judge_base_url,
+        projectflow_root=projectflow_root,
     )
 
     print(f"Run ID: {summary.run_id}")

@@ -37,6 +37,7 @@ Useful flags:
 - `--semantic-guard off|auto|required`: control semantic guard strictness.
 - `--no-cache`: force new real LLM calls.
 - `--model <label>`: reporting/cache label; do not rely on it for provider switching.
+- `--projectflow-root <path>`: use an external ProjectFlow Agent checkout for real mode (also `PROJECTFLOW_ROOT` env var). Report metadata records the source path and git commit.
 
 ## Configure Real Models
 

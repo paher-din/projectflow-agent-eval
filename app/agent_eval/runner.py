@@ -24,17 +24,15 @@ import hashlib
 import json
 import logging
 import os
+import subprocess
 import sys
 import time
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from urllib.parse import urlparse
 
-from app.agent.coordinator import CoordinatorAgent
-from app.agent.llm_client import LLMClient, build_agent_llm_client
-from app.agent.workflow import AgentRunResult
 from app.agent_eval.case_loader import load_fixtures, list_fixture_ids
 from app.agent_eval.judge import LLMJudge, StubJudge
 from app.agent_eval.report_writer import (
@@ -63,7 +61,6 @@ from app.agent_eval.schemas import (
     ValidatorResult,
 )
 from app.core.config import settings as app_settings
-from app.schemas.workspace_state import WorkspaceStateResponse
 from app.agent_eval.validators import run_all_validators
 from app.agent_eval.entity_resolver import (
     build_workspace_entity_index,
@@ -75,11 +72,17 @@ from app.agent_eval.assertion_engine import (
     run_all_assertions as evaluate_assertions,
 )
 
+if TYPE_CHECKING:
+    from app.agent.coordinator import CoordinatorAgent
+    from app.agent.llm_client import LLMClient, build_agent_llm_client
+    from app.agent.workflow import AgentRunResult
+    from app.schemas.workspace_state import WorkspaceStateResponse
+
 logger = logging.getLogger(__name__)
 
 OUTPUT_BASE = Path("output") / "agent-eval"
 DEFAULT_CACHE_DIR = OUTPUT_BASE / ".cache"
-_AGENT_SOURCE_HASH: str | None = None
+_AGENT_SOURCE_HASH: str | dict[str, str] | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -187,8 +190,7 @@ def _mock_agent_output(entrypoint: str) -> dict[str, Any]:
                 {
                     "task_id": "task-1",
                     "recommended_owner_user_id": "user-1",
-                    "backup_owner_user_id": "user-2",
-                    "reason": "小林擅长后端开发",
+                    "reason": "小林具备该任务所需技能",
                     "skill_match": "backend",
                     "availability_match": "15 小时可覆盖本周后端任务",
                 }
@@ -228,10 +230,9 @@ def _mock_agent_output(entrypoint: str) -> dict[str, Any]:
                     "type": "deadline",
                     "severity": "high",
                     "title": "核心功能可能无法按期交付",
-                    "description": "课程搜索后端 API 的 blocker 会连带影响前端联调。",
-                    "evidence": ["小林在 check-in 中报告模糊搜索技术方案不确定"],
-                    "recommendation": "简化搜索方案为 SQLite LIKE 查询",
-                    "task_id": "task-1",
+                    "description": "后端 API 的 blocker 会连带影响前端联调。",
+                    "evidence": ["有成员在 check-in 中报告技术方案不确定"],
+                    "recommendation": "简化技术方案",
                 }
             ],
         },
@@ -243,12 +244,27 @@ def _mock_agent_output(entrypoint: str) -> dict[str, Any]:
                 "status": "调整后计划",
             },
             "impact": "核心功能可以按期交付，范围有所缩小",
-            "task_changes": [
+            "task_changes": [],
+        },
+        "analyze-checkin": {
+            "reason": "根据签到数据分析团队进度",
+            "requires_confirmation": True,
+            "summary": "本周签到完成率 60%，核心任务进度正常，但存在依赖阻塞需要关注。",
+            "task_updates": [
                 {
-                    "task_id": "task-4",
-                    "can_cut": True,
-                    "reason": "将评价展示页延后，优先保证搜索和提交主流程。",
-                }
+                    "task_id": "task-1",
+                    "status": "in_progress",
+                    "progress": 60,
+                    "note": "核心任务进度正常",
+                },
+            ],
+            "risks": [
+                {
+                    "type": "dependency",
+                    "severity": "medium",
+                    "description": "外部依赖未确定影响开发进度",
+                    "affected_task_ids": ["task-1"],
+                },
             ],
         },
     }
@@ -268,12 +284,17 @@ def _get_entrypoint_from_case(case: Any) -> str:
         "active-push": "active-push",
         "analyze-risk": "analyze-risk",
         "replan": "replan",
+        "analyze-checkin": "analyze-checkin",
     }
     return mapping.get(ep, ep)
 
 
-def _run_real_agent_flow(case: Any, llm_client: LLMClient) -> AgentRunResult:
+def _run_real_agent_flow(case: Any, llm_client: "LLMClient", projectflow_root: str = "") -> "AgentRunResult":
     """Invoke the existing Agent flow without product-facing persistence."""
+    from app.agent.coordinator import CoordinatorAgent
+    from app.agent.workflow import AgentRunResult
+    from app.schemas.workspace_state import WorkspaceStateResponse
+
     workspace_state = WorkspaceStateResponse(**case.workspace_state)
     coordinator = CoordinatorAgent(llm_client=llm_client, session=None)
     entrypoint = _get_entrypoint_from_case(case)
@@ -294,6 +315,8 @@ def _run_real_agent_flow(case: Any, llm_client: LLMClient) -> AgentRunResult:
         return coordinator.analyze_risks(workspace_state)
     if entrypoint == "replan":
         return coordinator.replan(workspace_state)
+    if entrypoint == "analyze-checkin":
+        return coordinator.analyze_checkin(workspace_state)
 
     raise ValueError(f"Unsupported real-mode entrypoint: {entrypoint}")
 
@@ -313,9 +336,10 @@ def run_case(
     use_cache: bool = False,
     cache_context: dict[str, Any] | None = None,
     semantic_guard_mode: SemanticGuardMode | str = SemanticGuardMode.auto,
-    semantic_judge_client: LLMClient | None = None,
+    semantic_judge_client: "LLMClient | None" = None,
     semantic_judge_model: str = "",
     semantic_judge_base_url: str = "",
+    projectflow_root: str = "",
 ) -> CaseReport:
     """Execute a single benchmark case.
 
@@ -368,6 +392,7 @@ def run_case(
                 case,
                 model=model,
                 cache_context=cache_context,
+                projectflow_root=projectflow_root,
             )
             cached = _read_agent_cache(selected_cache_dir, cache_key) if use_cache else None
             if cached is not None:
@@ -379,9 +404,11 @@ def run_case(
                 raw_agent_output = cached.get("raw_agent_output")
             else:
                 if llm_client is None:
+                    from app.agent.llm_client import build_agent_llm_client
+
                     llm_client = build_agent_llm_client()
                     owns_llm_client = True
-                real_result = _run_real_agent_flow(case, llm_client)
+                real_result = _run_real_agent_flow(case, llm_client, projectflow_root=projectflow_root)
                 agent_output = real_result.output.model_dump(mode="json")
                 agent_status = real_result.status.value
                 attempts = real_result.attempts
@@ -435,6 +462,7 @@ def run_case(
         validator_result=validator_result,
         assertion_results=assertion_results_raw,
         assertion_metrics=assertion_metrics,
+        case_assertions=case_assertions,
         agent_status=agent_status,
         raw_agent_output=raw_agent_output,
         mode=mode,
@@ -565,9 +593,10 @@ def _build_agent_cache_key(
     *,
     model: str,
     cache_context: dict[str, Any] | None = None,
+    projectflow_root: str = "",
 ) -> str:
     context = dict(cache_context or {})
-    source_hash = context.pop("source_hash", None) or _agent_source_hash()
+    source_hash = context.pop("source_hash", None) or _agent_source_hash(projectflow_root)
     payload = {
         "version": 1,
         "kind": "projectflow-agent-output",
@@ -576,27 +605,46 @@ def _build_agent_cache_key(
         "provider": os.getenv("LLM_PROVIDER", ""),
         "base_url_host": _host_from_base_url(os.getenv("LLM_BASE_URL", "")),
         "source_hash": source_hash,
+        "projectflow_root": projectflow_root,
         "context": context,
     }
     raw = json.dumps(payload, ensure_ascii=False, sort_keys=True, default=str)
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
-def _agent_source_hash() -> str:
+def _agent_source_hash(projectflow_root: str = "") -> str:
     global _AGENT_SOURCE_HASH
-    if _AGENT_SOURCE_HASH is not None:
+    cache_key = projectflow_root or "__repo__"
+    if isinstance(_AGENT_SOURCE_HASH, dict):
+        cached = _AGENT_SOURCE_HASH.get(cache_key)
+        if cached is not None:
+            return cached
+    elif _AGENT_SOURCE_HASH is not None and not projectflow_root:
         return _AGENT_SOURCE_HASH
 
-    backend_root = Path(__file__).resolve().parents[2]
-    agent_root = backend_root / "app" / "agent"
+    if projectflow_root:
+        agent_root = Path(projectflow_root) / "app" / "agent"
+    else:
+        backend_root = Path(__file__).resolve().parents[2]
+        agent_root = backend_root / "app" / "agent"
+
     digest = hashlib.sha256()
     for path in sorted(agent_root.rglob("*.py")):
         if "__pycache__" in path.parts:
             continue
-        digest.update(str(path.relative_to(backend_root)).encode("utf-8"))
+        digest.update(str(path.relative_to(agent_root.parent.parent)).encode("utf-8"))
         digest.update(path.read_bytes())
-    _AGENT_SOURCE_HASH = digest.hexdigest()
-    return _AGENT_SOURCE_HASH
+
+    result = digest.hexdigest()
+
+    if projectflow_root:
+        if not isinstance(_AGENT_SOURCE_HASH, dict):
+            _AGENT_SOURCE_HASH = {}
+        _AGENT_SOURCE_HASH[cache_key] = result
+    else:
+        _AGENT_SOURCE_HASH = result
+
+    return result
 
 
 def _read_agent_cache(cache_dir: Path, cache_key: str) -> dict[str, Any] | None:
@@ -626,6 +674,7 @@ def _run_judge(
     validator_result: ValidatorResult | None = None,
     assertion_results: list[Any] | None = None,
     assertion_metrics: dict[str, Any] | None = None,
+    case_assertions: list[Any] | None = None,
     agent_status: str = "",
     raw_agent_output: str | None = None,
     mode: str = "mock",
@@ -684,7 +733,7 @@ def _run_judge(
     if (
         mode == "real"
         and normalized_judge_mode == "auto"
-        and _can_use_deterministic_judge(case, assertion_results)
+        and _can_use_deterministic_judge(case_assertions, assertion_results)
     ):
         score = _assertion_score_or_default(assertion_metrics)
         failure_categories = list(assertion_metrics.get("failure_categories", [])) if assertion_metrics else []
@@ -732,11 +781,13 @@ def _assertion_score_or_default(assertion_metrics: dict[str, Any] | None) -> flo
     return float(assertion_metrics.get("weighted_score", 0.85))
 
 
-def _can_use_deterministic_judge(case: Any, assertion_results: list[Any] | None) -> bool:
-    if not case.assertions or not assertion_results:
+def _can_use_deterministic_judge(
+    assertions: list[Any] | None, assertion_results: list[Any] | None
+) -> bool:
+    if not assertions or not assertion_results:
         return False
     semantic_evaluators = {"llm_semantic"}
-    for assertion in case.assertions:
+    for assertion in assertions:
         evaluator = getattr(assertion.evaluator, "value", assertion.evaluator)
         if evaluator in semantic_evaluators:
             return False
@@ -903,7 +954,7 @@ def _run_semantic_guard_for_case(
     *,
     mode: str,
     semantic_guard_mode: SemanticGuardMode,
-    semantic_judge_client: LLMClient | None,
+    semantic_judge_client: "LLMClient | None",
     semantic_judge_model: str,
     semantic_judge_base_url: str,
     cache_dir: Path,
@@ -964,12 +1015,15 @@ def _run_one_case(
     semantic_guard_mode: SemanticGuardMode = SemanticGuardMode.auto,
     semantic_judge_model: str = "",
     semantic_judge_base_url: str = "",
+    projectflow_root: str = "",
 ) -> CaseReport:
     """Worker: run a single case (including multi-run stability) in a thread.
 
     Each thread creates its own ``LLMClient`` so that the httpx connection
     pool stays local to the thread.
     """
+    from app.agent.llm_client import build_agent_llm_client
+
     llm_client = build_agent_llm_client() if mode == "real" else None
 
     all_run_reports: list[CaseReport] = []
@@ -987,6 +1041,7 @@ def _run_one_case(
                 semantic_guard_mode=semantic_guard_mode,
                 semantic_judge_model=semantic_judge_model,
                 semantic_judge_base_url=semantic_judge_base_url,
+                projectflow_root=projectflow_root,
             )
             report.run_id = run_id
             (output_dir / case.id).mkdir(parents=True, exist_ok=True)
@@ -1029,6 +1084,7 @@ def run_suite(
     semantic_guard_mode: SemanticGuardMode | str = SemanticGuardMode.auto,
     semantic_judge_model: str = "",
     semantic_judge_base_url: str = "",
+    projectflow_root: str = "",
 ) -> tuple[list[CaseReport], SuiteSummary]:
     """Load fixtures, run each case, and produce reports.
 
@@ -1069,6 +1125,21 @@ def run_suite(
     selected_semantic_judge_model = _selected_semantic_judge_model(semantic_judge_model)
     selected_semantic_judge_base_url = _selected_semantic_judge_base_url(semantic_judge_base_url)
 
+    # Resolve external ProjectFlow agent metadata
+    resolved_projectflow_root = ""
+    projectflow_git_commit = ""
+    if projectflow_root:
+        resolved_projectflow_root = str(Path(projectflow_root).resolve())
+        try:
+            result = subprocess.run(
+                ["git", "-C", resolved_projectflow_root, "rev-parse", "HEAD"],
+                capture_output=True, text=True, timeout=10,
+            )
+            if result.returncode == 0:
+                projectflow_git_commit = result.stdout.strip()
+        except Exception:
+            logger.warning("Failed to resolve git commit for %s", resolved_projectflow_root)
+
     config = RunConfig(
         mode=mode,
         model=model,
@@ -1087,6 +1158,9 @@ def run_suite(
         semantic_judge_model=selected_semantic_judge_model,
         semantic_judge_base_url_host=_host_from_base_url(selected_semantic_judge_base_url),
         semantic_judge_prompt_version=SEMANTIC_JUDGE_PROMPT_VERSION,
+        projectflow_source_path=resolved_projectflow_root,
+        projectflow_git_commit=projectflow_git_commit,
+        agent_model=model,
     )
 
     start = time.monotonic()
@@ -1126,6 +1200,7 @@ def run_suite(
                     semantic_guard_mode=selected_semantic_guard_mode,
                     semantic_judge_model=selected_semantic_judge_model,
                     semantic_judge_base_url=selected_semantic_judge_base_url,
+                    projectflow_root=projectflow_root,
                 ): case
                 for case in cases_to_run
             }

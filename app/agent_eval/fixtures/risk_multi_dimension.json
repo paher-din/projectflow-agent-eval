@@ -1,0 +1,135 @@
+{
+  "id": "risk_multi_dimension",
+  "title": "多维度风险需要优先级排序",
+  "module": "risk",
+  "entrypoint": "analyze-risk",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-20",
+    "current_datetime": "2026-06-20T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "frontend"
+        ],
+        "available_hours_per_week": 5,
+        "role_preference": "frontend",
+        "interests": "",
+        "constraints": "期末考试周"
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "在线支付系统",
+      "idea": "实现一个处理真实金钱交易的支付网关",
+      "deadline": "2026-07-01",
+      "deliverables": "安全的支付网关",
+      "direction_card": {
+        "problem": "需要处理支付",
+        "users": "商家",
+        "value": "安全的支付处理",
+        "deliverables": [
+          "支付 API",
+          "退款流程",
+          "对账系统"
+        ],
+        "boundaries": [],
+        "risks": [],
+        "suggested_questions": [],
+        "assumptions": [],
+        "unknowns": [],
+        "mvp_boundary": {
+          "must_have": [
+            "支付 API"
+          ],
+          "defer": [
+            "多币种支持"
+          ],
+          "out_of_scope": []
+        },
+        "decision_points": []
+      },
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "MVP 开发",
+          "goal": "实现基础支付功能",
+          "start_date": "2026-06-15",
+          "end_date": "2026-07-01",
+          "deliverable": "支付网关 MVP",
+          "done_criteria": [
+            "支付 API 可用",
+            "基础安全测试通过"
+          ],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "识别多维风险：安全（支付）、技术（单人前端）、时间（2周+低产能）、人员（考试周）",
+    "按严重程度排序风险",
+    "给出每个风险的具体缓解建议",
+    "安全风险排最高优先级"
+  ],
+  "forbidden_behavior": [
+    "忽略安全合规风险（支付场景）",
+    "风险列表不分优先级",
+    "忽略成员产能极低的事实"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.2,
+    "mvp_boundary": 0.1,
+    "actionability": 0.15,
+    "severity_calibration": 0.2,
+    "risk_type_fit": 0.25,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.75,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "empty_fallback"
+  ],
+  "assertions": [
+    {
+      "id": "risk_multi_has_security",
+      "group": "risk_type_fit",
+      "severity": "major",
+      "evaluator": "deterministic_text",
+      "rule": "required_terms_present",
+      "required": [
+        "安全",
+        "security"
+      ],
+      "failure_category": "risk_type_mismatch"
+    },
+    {
+      "id": "risk_multi_has_capacity",
+      "group": "risk_type_fit",
+      "severity": "major",
+      "evaluator": "deterministic_text",
+      "rule": "required_terms_present",
+      "required": [
+        "产能",
+        "capacity",
+        "时间",
+        "time"
+      ],
+      "failure_category": "risk_type_mismatch"
+    }
+  ]
+}

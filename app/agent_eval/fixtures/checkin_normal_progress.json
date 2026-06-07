@@ -1,0 +1,225 @@
+{
+  "id": "checkin_normal_progress",
+  "title": "正常签到进度分析",
+  "module": "checkin",
+  "entrypoint": "analyze-checkin",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "backend",
+          "ai_ml"
+        ],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "AI Agent 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": [
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI/UX 设计",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": [
+          "database",
+          "backend"
+        ],
+        "available_hours_per_week": 8,
+        "role_preference": "backend",
+        "interests": "数据模型设计",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "智能学习助手",
+      "idea": "AI 学习规划工具",
+      "deadline": "2026-07-15",
+      "deliverables": "Web 应用",
+      "direction_card": {
+        "problem": "选课信息不足，学生无法做出明智选择",
+        "users": "在校大学生",
+        "value": "提供真实课程评价信息帮助选课决策",
+        "deliverables": [
+          "课程搜索",
+          "评价提交",
+          "评价展示"
+        ],
+        "boundaries": [],
+        "risks": [],
+        "suggested_questions": [
+          "你希望覆盖哪些院系的课程？"
+        ],
+        "assumptions": [],
+        "unknowns": [
+          "内容审核机制不确定"
+        ],
+        "mvp_boundary": {
+          "must_have": [
+            "课程搜索",
+            "评价提交与展示"
+          ],
+          "defer": [
+            "用户积分系统"
+          ],
+          "out_of_scope": [
+            "移动端 App",
+            "第三方登录"
+          ]
+        },
+        "decision_points": []
+      },
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "核心功能开发",
+          "goal": "实现课程搜索和评价功能",
+          "start_date": "2026-06-08",
+          "end_date": "2026-07-01",
+          "deliverable": "可运行的 Web 应用，包含课程搜索和评价提交",
+          "done_criteria": [
+            "用户可搜索课程",
+            "用户可提交评价"
+          ],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task-1",
+          "title": "实现搜索 API",
+          "stage_id": "stage-1",
+          "status": "in_progress",
+          "priority": "high",
+          "estimated_hours": 16,
+          "assignee_id": "user-1",
+          "depends_on": [],
+          "done_criteria": "API 可用",
+          "description": "课程搜索接口"
+        },
+        {
+          "id": "task-2",
+          "title": "实现评价页面",
+          "stage_id": "stage-1",
+          "status": "in_progress",
+          "priority": "high",
+          "estimated_hours": 12,
+          "assignee_id": "user-2",
+          "depends_on": [],
+          "done_criteria": "页面可用",
+          "description": "评价表单和提交"
+        }
+      ],
+      "checkin_cycles": [
+        {
+          "id": "cycle-1",
+          "start_date": "2026-06-01",
+          "end_date": "2026-06-07",
+          "status": "active"
+        }
+      ],
+      "checkin_responses": [
+        {
+          "id": "resp-1",
+          "cycle_id": "cycle-1",
+          "user_id": "user-1",
+          "task_id": "task-1",
+          "progress": "60%",
+          "blockers": [],
+          "plan": "本周完成 API 开发",
+          "created_at": "2026-06-05T09:00:00+08:00"
+        },
+        {
+          "id": "resp-2",
+          "cycle_id": "cycle-1",
+          "user_id": "user-2",
+          "task_id": "task-2",
+          "progress": "30%",
+          "blockers": [
+            "UI 设计稿未定稿"
+          ],
+          "plan": "等设计确认后加速",
+          "created_at": "2026-06-05T09:30:00+08:00"
+        }
+      ],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "汇总所有成员的签到状态",
+    "识别 blocker（设计稿未定稿）并影响评估",
+    "基于进度比例评估时间风险",
+    "给出下一步行动建议"
+  ],
+  "forbidden_behavior": [
+    "忽略 blocker 信息",
+    "编造不存在的进度数据",
+    "忽略成员产能差异"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.25,
+    "mvp_boundary": 0.1,
+    "actionability": 0.2,
+    "evidence_quality": 0.2,
+    "deadline_awareness": 0.15,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "empty_fallback"
+  ],
+  "assertions": [
+    {
+      "id": "checkin_normal_blocker_aware",
+      "group": "evidence_quality",
+      "severity": "major",
+      "evaluator": "deterministic_text",
+      "rule": "required_terms_present",
+      "required": [
+        "设计稿",
+        "blocker",
+        "阻碍",
+        "UI"
+      ],
+      "failure_category": "context_missing"
+    },
+    {
+      "id": "checkin_normal_progress_tracked",
+      "group": "evidence_quality",
+      "severity": "major",
+      "evaluator": "deterministic_text",
+      "rule": "required_terms_present",
+      "required": [
+        "60",
+        "30",
+        "progress"
+      ],
+      "failure_category": "context_missing"
+    }
+  ]
+}

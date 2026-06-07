@@ -160,6 +160,12 @@ def write_markdown_summary(
         lines.append(f"- Temperature: {summary.config.temperature}")
         if summary.config.case_ids:
             lines.append(f"- Case Filter: {', '.join(summary.config.case_ids)}")
+        if summary.config.projectflow_source_path:
+            lines.append(f"- ProjectFlow Agent Source: {summary.config.projectflow_source_path}")
+        if summary.config.projectflow_git_commit:
+            lines.append(f"- ProjectFlow Agent Commit: {summary.config.projectflow_git_commit}")
+        if summary.config.agent_model:
+            lines.append(f"- Agent Model: {summary.config.agent_model}")
         lines.append("")
 
     # Overall summary

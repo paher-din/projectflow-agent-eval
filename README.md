@@ -150,6 +150,7 @@ Useful flags:
 - `--judge-mode auto|llm|stub`: select main judge behavior
 - `--semantic-guard off|auto|required`: control semantic guard strictness
 - `--no-cache`: force fresh real LLM calls
+- `--projectflow-root <path>`: point real mode at an external ProjectFlow Agent checkout instead of the repo's bundled copy (also available as `PROJECTFLOW_ROOT` env var)
 
 ## Inspect Cases
 

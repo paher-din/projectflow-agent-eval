@@ -1,11 +1,55 @@
 from __future__ import annotations
 
 import argparse
+import os
 import sys
+from pathlib import Path
 
 from app.agent_eval.commands.cases import list_cases, show_case
 from app.agent_eval.commands.common import CommandError
 from app.agent_eval.runner import DEFAULT_CACHE_DIR
+
+
+# ---------------------------------------------------------------------------
+# ProjectFlow root resolution (must happen before any app.agent.* lazy import)
+# ---------------------------------------------------------------------------
+
+def _resolve_projectflow_root(argv: list[str] | None = None) -> str:
+    """Extract --projectflow-root from raw CLI args or env var.
+
+    Called early in ``main()`` so ``app.__path__`` can be patched before any
+    lazy ``app.agent.*`` import executes.
+    """
+    # --projectflow-root flag takes priority
+    flag = "--projectflow-root"
+    for i, arg in enumerate(argv or sys.argv[1:]):
+        if arg == flag and i + 1 < len(argv or sys.argv[1:]):
+            return (argv or sys.argv[1:])[i + 1]
+        if arg.startswith(f"{flag}="):
+            return arg.split("=", 1)[1]
+    # Fall back to env var
+    return os.getenv("PROJECTFLOW_ROOT", "")
+
+
+def _patch_app_path(projectflow_root: str) -> None:
+    """Prepend the external ProjectFlow ``app/`` directory to ``app.__path__``.
+
+    After this, ``app.agent.*`` imports resolve to the external checkout while
+    ``app.agent_eval.*`` (which only exists in this repo) still resolves here.
+    """
+    import app
+
+    external_app = str(Path(projectflow_root).resolve() / "app")
+    if not Path(external_app).is_dir():
+        print(
+            f"Error: --projectflow-root {projectflow_root}: "
+            f"app/ directory not found at {external_app}",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    if external_app not in app.__path__:
+        app.__path__.insert(0, external_app)
 
 
 def _build_parser() -> argparse.ArgumentParser:
@@ -101,6 +145,7 @@ def _add_run_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--case-filter", default="")
     parser.add_argument("--cache-dir", default=str(DEFAULT_CACHE_DIR))
     parser.add_argument("--no-cache", action="store_true")
+    parser.add_argument("--projectflow-root", default="")
 
 
 def _dispatch(args: argparse.Namespace) -> int:
@@ -126,6 +171,7 @@ def _dispatch(args: argparse.Namespace) -> int:
             cache_dir=args.cache_dir,
             no_cache=args.no_cache,
             run_ref=getattr(args, "run_ref", ""),
+            projectflow_root=args.projectflow_root,
         )
     if args.command == "report" and args.report_command:
         from app.agent_eval.commands.reports import show_report
@@ -193,6 +239,14 @@ def _is_legacy_runner_invocation(argv: list[str]) -> bool:
 
 def main(argv: list[str] | None = None) -> int:
     selected_argv = list(sys.argv[1:] if argv is None else argv)
+
+    # Patch app.__path__ before any app.agent.* lazy import happens.
+    # Must run after top-level imports (so "app" is in sys.modules) but
+    # before _dispatch() where run_benchmark -> run_suite -> CoordinatorAgent.
+    projectflow_root = _resolve_projectflow_root(selected_argv)
+    if projectflow_root:
+        _patch_app_path(projectflow_root)
+
     if _is_legacy_runner_invocation(selected_argv):
         from app.agent_eval.runner import main as runner_main
 

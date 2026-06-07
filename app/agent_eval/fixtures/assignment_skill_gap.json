@@ -1,0 +1,147 @@
+{
+  "id": "assignment_skill_gap",
+  "title": "必需技能缺失的任务分配",
+  "module": "assignment",
+  "entrypoint": "recommend-assignments",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 15,
+        "role_preference": "frontend",
+        "interests": "UI/UX",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": [
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "设计",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "AI 后端服务",
+      "idea": "实现一个需要 GPU 训练的 AI 模型推理服务",
+      "deadline": "2026-08-01",
+      "deliverables": "可部署的 AI 推理 API",
+      "direction_card": {
+        "problem": "需要一个高效的模型推理后端",
+        "users": "前端开发者",
+        "value": "降低 AI 功能集成门槛",
+        "deliverables": [
+          "推理 API",
+          "模型管理",
+          "性能监控"
+        ],
+        "boundaries": [],
+        "risks": [],
+        "suggested_questions": [],
+        "assumptions": [],
+        "unknowns": [],
+        "mvp_boundary": {
+          "must_have": [
+            "推理 API"
+          ],
+          "defer": [],
+          "out_of_scope": []
+        },
+        "decision_points": []
+      },
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "核心功能开发",
+          "goal": "实现课程搜索和评价功能",
+          "start_date": "2026-06-08",
+          "end_date": "2026-07-01",
+          "deliverable": "可运行的 Web 应用，包含课程搜索和评价提交",
+          "done_criteria": [
+            "用户可搜索课程",
+            "用户可提交评价"
+          ],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task-1",
+          "title": "实现 PyTorch 模型推理管道",
+          "stage_id": "stage-1",
+          "status": "todo",
+          "priority": "high",
+          "estimated_hours": 24,
+          "assignee_id": null,
+          "depends_on": [],
+          "done_criteria": "模型可以正确推理并返回结果",
+          "description": "需要熟悉 PyTorch、CUDA、模型部署"
+        }
+      ],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "识别技能缺口（无后端/AI 成员）",
+    "标注技能不匹配的风险",
+    "建议调整任务范围或招募新成员",
+    "不自作主张将高难度 AI 任务分配给前端成员"
+  ],
+  "forbidden_behavior": [
+    "忽略技能缺口随意分配任务",
+    "假装成员具备他们不拥有的技能"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.2,
+    "mvp_boundary": 0.1,
+    "actionability": 0.2,
+    "member_fit": 0.25,
+    "availability_awareness": 0.15,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.75,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "empty_fallback"
+  ],
+  "assertions": [
+    {
+      "id": "assignment_skill_gap_flagged",
+      "group": "member_fit",
+      "severity": "major",
+      "evaluator": "deterministic_text",
+      "rule": "required_terms_present",
+      "required": [
+        "skill",
+        "技能",
+        "匹配",
+        "match"
+      ],
+      "failure_category": "skill_mismatch"
+    }
+  ]
+}

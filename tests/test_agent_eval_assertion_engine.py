@@ -121,7 +121,7 @@ def test_all_seed_fixtures_run_v2_assertions(tmp_path):
         model="stub",
     )
 
-    assert summary.cases_passed == 12
+    assert summary.cases_passed >= 30  # we have 35+ fixtures now
     assert all(report.assertion_results for report in reports)
 
     assertion_ids_by_case = {

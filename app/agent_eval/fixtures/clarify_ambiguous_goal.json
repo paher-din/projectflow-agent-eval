@@ -1,0 +1,117 @@
+{
+  "id": "clarify_ambiguous_goal",
+  "title": "目标模糊缺少用户画像",
+  "module": "clarification",
+  "entrypoint": "clarify",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "backend",
+          "ai_ml"
+        ],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "AI Agent 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": [
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI/UX 设计",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": [
+          "database",
+          "backend"
+        ],
+        "available_hours_per_week": 8,
+        "role_preference": "backend",
+        "interests": "数据模型设计",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "有趣的项目",
+      "idea": "做一个有点意思的东西，解决一些问题",
+      "deadline": "2026-12-31",
+      "deliverables": "一个产品",
+      "direction_card": null,
+      "status": "active",
+      "current_stage_id": null,
+      "stages": [],
+      "tasks": [],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "大量输出 unknowns 标注模糊点",
+    "建议先明确用户画像和核心问题",
+    "输出 decision_points 让团队决策方向",
+    "不编造具体的技术方案"
+  ],
+  "forbidden_behavior": [
+    "编造具体用户画像或问题定义",
+    "直接生成完整技术方案",
+    "跳过澄清直接进入规划"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.3,
+    "mvp_boundary": 0.15,
+    "actionability": 0.15,
+    "clarification_quality": 0.3,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.75,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "fabricated_workspace_entity",
+    "empty_fallback"
+  ],
+  "assertions": [
+    {
+      "id": "clarify_ambiguous_unknowns",
+      "group": "state_grounding",
+      "severity": "hard",
+      "evaluator": "deterministic_text",
+      "rule": "required_terms_present",
+      "required": [
+        "unknowns"
+      ],
+      "failure_category": "context_missing"
+    },
+    {
+      "id": "clarify_ambiguous_questions",
+      "group": "actionability",
+      "severity": "major",
+      "evaluator": "deterministic_text",
+      "rule": "required_terms_present",
+      "required": [
+        "suggested_questions"
+      ],
+      "failure_category": "weak_actionability"
+    }
+  ]
+}

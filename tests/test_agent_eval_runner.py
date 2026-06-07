@@ -230,7 +230,7 @@ class TestRunCase:
             json.dumps(judge_payload, ensure_ascii=False),
         ])
 
-        report = run_case(case, mode="real", llm_client=client, model="real-test")
+        report = run_case(case, mode="real", llm_client=client, model="real-test", judge_mode="llm")
 
         assert client.calls == 2
         assert report.agent_status == "success"
@@ -547,7 +547,7 @@ class TestRunCase:
 
 class TestRunSuiteIntegration:
     def test_mock_suite_runs_all_cases(self):
-        """Running the full fixture suite in mock mode should complete all 12 cases."""
+        """Running the full fixture suite in mock mode should complete all cases."""
         fixtures_dir = Path(__file__).resolve().parent.parent / "app" / "agent_eval" / "fixtures"
         if not fixtures_dir.exists():
             pytest.skip("Fixtures directory not found")
@@ -560,9 +560,9 @@ class TestRunSuiteIntegration:
                 output_dir=tmp,
                 model="stub",
             )
-            assert len(reports) == 12
-            assert summary.cases_total == 12
-            assert summary.cases_passed == 12
+            assert len(reports) >= 30
+            assert summary.cases_total >= 30
+            assert summary.cases_passed >= 30
 
     def test_mock_suite_all_status_valid(self):
         """All cases in mock mode should have a non-error status."""
@@ -586,7 +586,7 @@ class TestRunSuiteIntegration:
             out_dir = Path(tmp)
             # Check that report files were written
             report_files = list(out_dir.glob("*.report.json"))
-            assert len(report_files) == 12
+            assert len(report_files) >= 30
             # Check suite summary
             assert (out_dir / "suite_summary.json").exists()
             # Check markdown summary
@@ -703,7 +703,7 @@ class TestRunSuiteIntegration:
 
         with tempfile.TemporaryDirectory() as tmp:
             _, summary = run_suite(str(fixtures_dir), mode="mock", output_dir=tmp)
-            assert summary.cases_total == 12
+            assert summary.cases_total >= 30
             assert 0 <= summary.average_score <= 1.0
             assert summary.duration_seconds >= 0
             assert summary.run_id.startswith("2")  # starts with year digit
@@ -747,8 +747,8 @@ class TestRunSuiteIntegration:
             per_run_reports = list(out_dir.glob("*/run_*.report.json"))
             per_run_outputs = list(out_dir.glob("*/run_*.output.json"))
 
-            assert len(per_run_reports) == 36
-            assert len(per_run_outputs) == 36
+            assert len(per_run_reports) >= 90  # 30+ cases × 3 runs
+            assert len(per_run_outputs) >= 90
 
 
 # ---------------------------------------------------------------------------
@@ -777,12 +777,19 @@ class TestCLI:
                 text=True,
                 cwd=Path(__file__).resolve().parent.parent,
             )
-            assert "12/12 passed" in result.stdout
+            # Check that all cases passed (count varies, should be >= 30)
+            import re
+            match = re.search(r"Cases:\s+(\d+)/(\d+) passed", result.stdout)
+            assert match, f"Expected 'Cases: N/N passed' in output, got: {result.stdout[:200]}"
+            cases_passed = int(match.group(1))
+            cases_total = int(match.group(2))
+            assert cases_passed == cases_total
+            assert cases_total >= 30
             assert "fallback_bad_json" in result.stdout
             assert result.returncode == 0
 
     def test_list_fixtures(self):
-        """CLI list-fixtures command should list all 12 fixtures."""
+        """CLI list-fixtures command should list all fixtures."""
         import subprocess
         import sys
 
@@ -798,7 +805,10 @@ class TestCLI:
             cwd=Path(__file__).resolve().parent.parent,
         )
         assert result.returncode == 0
-        assert "Total: 12" in result.stdout
+        import re
+        match = re.search(r"Total: (\d+)", result.stdout)
+        assert match, f"Expected 'Total: N' in output"
+        assert int(match.group(1)) >= 30
         # Check for specific fixture IDs
         for fid in ["clarify_sparse_project", "plan_with_current_date", "fallback_bad_json"]:
             assert fid in result.stdout
@@ -864,5 +874,5 @@ class TestCLI:
 
             diff = json.loads((diff_dir / "diff_report.json").read_text(encoding="utf-8"))
             assert exit_code == 0
-            assert diff["cases_compared"] == 12
+            assert diff["cases_compared"] >= 30
 

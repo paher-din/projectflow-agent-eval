@@ -1,0 +1,149 @@
+{
+  "id": "risk_simple_project",
+  "title": "简单项目不应制造虚假风险",
+  "module": "risk",
+  "entrypoint": "analyze-risk",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-05",
+    "current_datetime": "2026-06-05T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "backend",
+          "ai_ml"
+        ],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "AI Agent 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": [
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI/UX 设计",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": [
+          "database",
+          "backend"
+        ],
+        "available_hours_per_week": 8,
+        "role_preference": "backend",
+        "interests": "数据模型设计",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "团队介绍页面",
+      "idea": "做一个静态的团队介绍 Landing Page",
+      "deadline": "2026-07-01",
+      "deliverables": "一个 HTML 页面",
+      "direction_card": {
+        "problem": "新访客不了解团队",
+        "users": "网站访客",
+        "value": "展示团队信息和项目",
+        "deliverables": [
+          "团队介绍页"
+        ],
+        "boundaries": [
+          "单页面"
+        ],
+        "risks": [],
+        "suggested_questions": [],
+        "assumptions": [],
+        "unknowns": [],
+        "mvp_boundary": {
+          "must_have": [
+            "成员展示",
+            "项目介绍"
+          ],
+          "defer": [
+            "动画效果"
+          ],
+          "out_of_scope": [
+            "后端服务",
+            "用户系统"
+          ]
+        },
+        "decision_points": []
+      },
+      "status": "active",
+      "current_stage_id": "stage-1",
+      "stages": [
+        {
+          "id": "stage-1",
+          "name": "开发",
+          "goal": "完成页面开发",
+          "start_date": "2026-06-08",
+          "end_date": "2026-06-25",
+          "deliverable": "上线页面",
+          "done_criteria": [
+            "页面可访问"
+          ],
+          "status": "active",
+          "order_index": 0
+        }
+      ],
+      "tasks": [],
+      "checkin_cycles": [],
+      "checkin_responses": [],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "准确识别低风险（简单项目、短周期、明确范围）",
+    "不编造不存在的高风险项",
+    "给出适当的低风险级别"
+  ],
+  "forbidden_behavior": [
+    "给简单项目编造高风险",
+    "夸大技术难度"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.25,
+    "mvp_boundary": 0.15,
+    "actionability": 0.15,
+    "severity_calibration": 0.25,
+    "risk_type_fit": 0.1,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.75,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "empty_fallback"
+  ],
+  "assertions": [
+    {
+      "id": "risk_simple_no_fake_high_risk",
+      "group": "severity_calibration",
+      "severity": "hard",
+      "evaluator": "deterministic_text",
+      "rule": "forbidden_terms_absent",
+      "forbidden": [
+        "极高风险",
+        "critical",
+        "severe risk",
+        "严重风险"
+      ],
+      "failure_category": "risk_overstatement"
+    }
+  ]
+}
