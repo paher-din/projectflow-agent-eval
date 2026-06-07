@@ -177,6 +177,12 @@ def _check_fabricated_entity(
     # Filter out common false positives
     fabricated = {f for f in fabricated if not f.startswith("p0") and not f.startswith("p1")}
 
+    # For breakdown outputs, new task IDs are valid — they're being created by the agent
+    tasks_list = agent_output.get("tasks") if isinstance(agent_output, dict) else None
+    if isinstance(tasks_list, list):
+        new_task_ids = {t["id"] for t in tasks_list if isinstance(t, dict) and t.get("id")}
+        fabricated -= new_task_ids
+
     passed = len(fabricated) == 0
     detail = ""
     if not passed:

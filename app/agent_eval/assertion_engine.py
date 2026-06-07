@@ -577,6 +577,12 @@ def _eval_graph(
                 task_ids.add(tid)
             deps = t.get("dependency_ids", [])
             all_dep_ids.update(deps)
+        # Also include existing workspace task IDs — new tasks may depend on them
+        ws = kwargs.get("workspace_state") or {}
+        ws_tasks = ws.get("project", {}).get("tasks", [])
+        for wt in ws_tasks:
+            if isinstance(wt, dict) and wt.get("id"):
+                task_ids.add(wt["id"])
         missing = [d for d in sorted(all_dep_ids) if d and d not in task_ids]
         if missing:
             for mid in missing:
@@ -1001,6 +1007,7 @@ NEGATED_SCOPE_MARKERS = (
     "不接入",
     "不支持",
     "不包含",
+    "不包括",
     "不开发",
     "不实现",
     "不做",
