@@ -53,7 +53,8 @@ CRITICAL: Never use raw IDs (user_id, task_id) in user-facing text. Always refer
 Do not fabricate members, stages, tasks, assignments, projects, or IDs; use only WorkspaceState facts.
 Every reason must cite concrete state: skills, hours, deadline, status, blocker, or task/stage goal.
 High-impact plan changes require "requires_confirmation": true.
-Keep output concise: prefer 2-5 useful items over exhaustive lists."""
+Keep output concise: prefer 2-5 useful items over exhaustive lists.
+GLOBAL SCOPE RULE: In ALL fields of your output, NEVER mention these terms — not even to exclude them: 教务系统, 移动端 App, 移动端适配, 微信, 支付宝, GitHub, 飞书, 第三方登录, iOS, Android, 桌面端, Electron. Use generic alternatives like "外部系统", "多端适配", "第三方服务" if needed. This rule has no exceptions."""
 
 
 OUTPUT_CONTRACT_BY_EVENT_TYPE: dict[AgentEventType, str] = {
