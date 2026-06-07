@@ -30,6 +30,8 @@ This is a standalone AgentEval benchmark harness for ProjectFlow agent outputs. 
 - When asked to run the benchmark, prefer `pfae run mock` for fast local checks; use `pfae run real` only with existing provider config. The `--model` flag on `pfae run` is a reporting/cache label — switch the active model via `pfae config agent use <name>` or `pfae config judge use <name>` instead.
 - For real mode testing against the main ProjectFlow Agent code (not this repo's snapshot), use `--projectflow-root <path>` or set `PROJECTFLOW_ROOT`. This makes `app.agent.*` imports resolve to the external checkout via `app.__path__` extension. The run metadata records the source path and git commit.
 - The benchmark suite has 49 cases across 10 modules (4-6 per module), including 8 warm-state fixtures (accumulated workspace state) and 6 immutable-state fixtures (confirmed assignments, done stages, existing direction cards that the Agent must not modify). The `immutable_ids_not_in_proposal_context` assertion rule deterministically enforces the CLAUDE.md rule "不直接修改 finalized assignment 或 task owner." Mock mode passes all 49; real mode results depend on Agent quality.
+- Every benchmark run auto-appends a one-line summary to `output/agent-eval/HISTORY.md` (run ID, mode, cases, score, HF, time, commit, top failures). Read that file for a quick history of all runs.
+- Before running real benchmarks, sync agent code from ProjectFlow with `pfae sync`. Auto-sync runs before `pfae run real` by default; use `--no-sync` to skip. See README.md "Sync Agent Code" section for details.
 
 ## Public Repository Safety
 

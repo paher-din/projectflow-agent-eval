@@ -11,6 +11,7 @@ ProjectFlow AgentEval runs fixture-based benchmark cases against ProjectFlow age
 It includes:
 
 - `pfae`: the primary CLI for agents and humans
+- `pfae sync`: syncs agent code from ProjectFlow before benchmark runs
 - `app/agent_eval`: benchmark runner, fixtures, validators, assertions, reports, semantic guard, and LLM judge integration
 - `app/agent`: a minimal ProjectFlow agent runtime used by real-mode benchmark execution
 - `skills/projectflow-agent-eval`: the agent skill that tells Codex or another agent when and how to call `pfae`
@@ -26,7 +27,7 @@ It intentionally excludes:
 
 ## Install
 
-From a fresh clone:
+Requires Python 3.11+. From a fresh clone:
 
 ```powershell
 python -m pip install -e ".[dev]"
@@ -52,6 +53,23 @@ pfae diagnose latest
 ```
 
 Use `mock` for smoke checks, CLI validation, report parsing, and benchmark harness changes. It is the safest default when no real provider configuration is available.
+
+## Sync Agent Code
+
+The benchmark evaluates ProjectFlow's agent modules. Before running real benchmarks, sync the latest agent code from your ProjectFlow checkout:
+
+```bash
+# Sync explicitly
+pfae sync --projectflow-root /path/to/ProjectFlow
+
+# Or set the environment variable once
+export PROJECTFLOW_ROOT=/path/to/ProjectFlow
+pfae sync
+```
+
+`pfae sync` copies the agent logic files (`llm_client.py`, `output_schemas.py`, `prompts.py`, `modules/`) from ProjectFlow into the benchmark. It does NOT sync `coordinator.py`, `workflow.py`, or `workspace_state.py` — the benchmark keeps its own lightweight versions.
+
+When `pfae run real` is called, auto-sync runs first by default. Use `--no-sync` to skip (e.g., for debugging with previously synced code). After sync, `.sync_meta.json` records the git commit, dirty state, and timestamp.
 
 ## First Real-Mode Setup
 
@@ -150,6 +168,7 @@ Useful flags:
 - `--judge-mode auto|llm|stub`: select main judge behavior
 - `--semantic-guard off|auto|required`: control semantic guard strictness
 - `--no-cache`: force fresh real LLM calls
+- `--sync` / `--no-sync`: enable/disable auto-sync before real runs (default: enabled)
 - `--projectflow-root <path>`: point real mode at an external ProjectFlow Agent checkout instead of the repo's bundled copy (also available as `PROJECTFLOW_ROOT` env var)
 
 ## Inspect Cases
@@ -162,6 +181,12 @@ pfae case show <case_id>
 Use these before adding or modifying benchmark fixtures.
 
 ## Reports And Diagnosis
+
+Every benchmark run automatically appends a one-line summary to `output/agent-eval/HISTORY.md`. The table includes run ID, mode, pass rate, score, hard failure count, duration, ProjectFlow commit, and top failure categories. To view all historical results at a glance:
+
+```bash
+cat output/agent-eval/HISTORY.md
+```
 
 Read the latest run:
 

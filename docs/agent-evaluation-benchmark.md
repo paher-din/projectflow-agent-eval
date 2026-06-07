@@ -3,7 +3,9 @@
 **Document status:** Draft, research-backed redesign  
 **Snapshot date:** 2026-06-05  
 **Scope:** ProjectFlow MVP Agent output quality, reliability, and function-fit evaluation  
-**Supersedes:** v1 broad-rubric benchmark in Appendix A  
+**Supersedes:** v1 broad-rubric benchmark in Appendix A
+
+**Current implementation status (2026-06-08):** 49 cases across 10 modules. Mock mode: 49/49. Real mode: 46/49 (up from 18/49). Fixture schema updated to current `WorkspaceStateResponse` (owner_user_id, can_cut, stage_id, etc.). 27 fixtures migrated. Assertion/validator fixes applied for dependency_ids_exist, fabricated_workspace_entity, and negation markers. See `output/agent-eval/HISTORY.md` for run history.  
 
 ---
 
