@@ -31,6 +31,7 @@ class FailureCategory(str, Enum):
     dependency_inconsistency = "dependency_inconsistency"
     no_op_replan = "no_op_replan"
     missing_assertion_evidence = "missing_assertion_evidence"
+    immutable_state_violation = "immutable_state_violation"
 
 
 # ---------------------------------------------------------------------------
