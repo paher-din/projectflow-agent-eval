@@ -54,7 +54,13 @@ Do not fabricate members, stages, tasks, assignments, projects, or IDs; use only
 Every reason must cite concrete state: skills, hours, deadline, status, blocker, or task/stage goal.
 High-impact plan changes require "requires_confirmation": true.
 Keep output concise: prefer 2-5 useful items over exhaustive lists.
-GLOBAL SCOPE RULE: In ALL fields of your output, NEVER mention these terms — not even to exclude them: 教务系统, 移动端 App, 移动端适配, 微信, 支付宝, GitHub, 飞书, 第三方登录, iOS, Android, 桌面端, Electron. Use generic alternatives like "外部系统", "多端适配", "第三方服务" if needed. This rule has no exceptions."""
+GLOBAL SCOPE RULE: In ALL fields of your output, NEVER mention these terms — not even to exclude them: 教务系统, 移动端 App, 移动端适配, 微信, 支付宝, GitHub, 飞书, 第三方登录, iOS, Android, 桌面端, Electron. Use generic alternatives like "外部系统", "多端适配", "第三方服务" if needed. This rule has no exceptions.
+BEFORE OUTPUT SELF-CHECK (verify each item, fix any violation before returning):
+- All dates use YYYY-MM-DD format (not "6/15" or "下周一")
+- No forbidden scope terms appear anywhere in the output
+- Every referenced user_id exists in the members list
+- Every referenced task_id/stage_id exists in the workspace state
+- requires_confirmation is true for high-impact changes"""
 
 
 OUTPUT_CONTRACT_BY_EVENT_TYPE: dict[AgentEventType, str] = {
@@ -65,7 +71,7 @@ Use 2-4 deliverables, boundaries, risks, and questions.
 SCOPE RULE: Never mention specific external systems (教务系统, 微信, 支付宝, 移动端 App, etc.) in any field. Use generic terms like "外部系统" or "第三方服务" instead. Mentioning these terms — even to exclude them — triggers scope-creep detection.""",
     AgentEventType.plan: """StagePlanOutput JSON object:
 Required keys: "stages" array, "reason" string, "requires_confirmation" true.
-Each stage: "name" string, "goal" string, "start_date" YYYY-MM-DD, "end_date" YYYY-MM-DD, "deliverable" string, "done_criteria" string[], "order_index" integer, "reason" string.
+Each stage: "name" string, "goal" string, "start_date" YYYY-MM-DD, "end_date" YYYY-MM-DD (always use this exact format, e.g. "2026-06-15" not "6/15"), "deliverable" string, "done_criteria" string[], "order_index" integer, "reason" string.
 Return 3 lean stages within the project deadline unless current state clearly needs fewer.
 SCOPE RULE: When the project idea is too ambitious for the team size or deadline, converge scope to MVP. Explicitly defer non-essential features. NEVER mention specific external systems (教务系统, 微信, 支付宝, 移动端 App, GitHub, 飞书, etc.) in ANY field — stage names, goals, deliverables, done_criteria, reason, or descriptions. Use generic terms like "外部集成" or "第三方服务" if needed. This rule applies everywhere: even when describing what the project wants to do or what you are deferring. Reject impossible timelines by proposing a reduced scope rather than accepting the full plan.""",
     AgentEventType.breakdown: """TaskBreakdownOutput JSON object:
@@ -100,7 +106,8 @@ Stage adjustment: "stage_id" existing stage id, optional "new_start_date", optio
 Task change: "task_id" existing task id, optional "title", "status" (not_started/in_progress/done/blocked/cancelled), "owner_user_id", "due_date", "can_cut", "reason" string.
 Return the smallest useful proposal: at most 1 stage_adjustment, 1 task_change, and 1 action_card. Never change finalized owners without explicit evidence and confirmation.
 Each action_card must have: "type" (one of personal_task/team_next_step/reminder/risk_action/kickoff_tip/checkin_prompt/assignment_request/suggestion), "title" string, "reason" string, optional "content" string, optional "task_id" or "user_id".
-CRITICAL: Even when no scope cuts are appropriate, you MUST produce at least one concrete structural change — extend a deadline, reassign a member, adjust priority, or add a mitigation task. A replan where before and after are identical is never acceptable. If the project is already minimal, extend the deadline or add a buffer task.""",
+CRITICAL: Even when no scope cuts are appropriate, you MUST produce at least one concrete structural change — extend a deadline, reassign a member, adjust priority, or add a mitigation task. A replan where before and after are identical is never acceptable. If the project is already minimal, extend the deadline or add a buffer task.
+IMPORTANT: Only reference members who are currently active in the workspace. Do NOT assign tasks to members who have left or are no longer available. Check the members list before making assignments. When a member has left, explicitly mention their name and that they have left (e.g. "小王已离开团队") in the reason or summary.""",
 }
 
 
