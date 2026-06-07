@@ -1,0 +1,269 @@
+{
+  "id": "active_push_immutable_done",
+  "title": "已完成任务不应被重新推送",
+  "module": "active_push",
+  "entrypoint": "active-push",
+  "workspace_state": {
+    "workspace_id": "ws-1",
+    "workspace_name": "Spark Team",
+    "current_date": "2026-06-20",
+    "current_datetime": "2026-06-20T10:00:00+08:00",
+    "timezone": "Asia/Shanghai",
+    "members": [
+      {
+        "user_id": "user-1",
+        "display_name": "小林",
+        "skills": [
+          "backend",
+          "ai_ml"
+        ],
+        "available_hours_per_week": 15,
+        "role_preference": "backend",
+        "interests": "AI Agent 开发",
+        "constraints": ""
+      },
+      {
+        "user_id": "user-2",
+        "display_name": "小张",
+        "skills": [
+          "frontend",
+          "design"
+        ],
+        "available_hours_per_week": 10,
+        "role_preference": "frontend",
+        "interests": "UI/UX 设计",
+        "constraints": "每周三下午有课"
+      },
+      {
+        "user_id": "user-3",
+        "display_name": "小王",
+        "skills": [
+          "database",
+          "backend"
+        ],
+        "available_hours_per_week": 8,
+        "role_preference": "backend",
+        "interests": "数据模型设计",
+        "constraints": ""
+      }
+    ],
+    "project": {
+      "id": "project-1",
+      "name": "校园课程评价平台",
+      "idea": "一个让学生匿名评价课程的 Web 平台",
+      "deadline": "2026-07-15",
+      "deliverables": "Web 应用",
+      "direction_card": {
+        "problem": "选课信息不足，学生无法做出明智选择",
+        "users": "在校大学生",
+        "value": "提供真实课程评价信息帮助选课决策",
+        "deliverables": [
+          "课程搜索",
+          "评价提交",
+          "评价展示"
+        ],
+        "boundaries": [],
+        "risks": [],
+        "suggested_questions": [
+          "你希望覆盖哪些院系的课程？"
+        ],
+        "assumptions": [],
+        "unknowns": [
+          "内容审核机制不确定"
+        ],
+        "mvp_boundary": {
+          "must_have": [
+            "课程搜索",
+            "评价提交与展示"
+          ],
+          "defer": [
+            "用户积分系统"
+          ],
+          "out_of_scope": [
+            "移动端 App",
+            "第三方登录"
+          ]
+        },
+        "decision_points": []
+      },
+      "status": "active",
+      "current_stage_id": "stage-12",
+      "stages": [
+        {
+          "id": "stage-11",
+          "name": "核心功能开发",
+          "goal": "实现搜索和评价",
+          "start_date": "2026-06-01",
+          "end_date": "2026-06-18",
+          "deliverable": "搜索 + 评价功能",
+          "done_criteria": [
+            "搜索可用",
+            "评价可用"
+          ],
+          "status": "done",
+          "order_index": 0
+        },
+        {
+          "id": "stage-12",
+          "name": "优化与测试",
+          "goal": "性能优化和测试",
+          "start_date": "2026-06-19",
+          "end_date": "2026-07-10",
+          "deliverable": "测试通过的上线版本",
+          "done_criteria": [
+            "性能达标",
+            "测试覆盖率 > 70%"
+          ],
+          "status": "active",
+          "order_index": 1
+        }
+      ],
+      "tasks": [
+        {
+          "id": "task-1",
+          "title": "Mock output 引用的占位任务",
+          "stage_id": "stage-12",
+          "status": "in_progress",
+          "priority": "medium",
+          "estimated_hours": 0,
+          "assignee_id": "user-2",
+          "depends_on": [],
+          "done_criteria": "N/A",
+          "description": "仅用于让 mock output 中的 task-1 引用合法化"
+        },
+        {
+          "id": "task-11",
+          "title": "实现课程搜索 API",
+          "stage_id": "stage-11",
+          "status": "done",
+          "priority": "high",
+          "estimated_hours": 16,
+          "assignee_id": "user-1",
+          "depends_on": [],
+          "done_criteria": "API 可用",
+          "description": "课程搜索接口"
+        },
+        {
+          "id": "task-12",
+          "title": "实现评价提交页面",
+          "stage_id": "stage-11",
+          "status": "done",
+          "priority": "high",
+          "estimated_hours": 12,
+          "assignee_id": "user-2",
+          "depends_on": [],
+          "done_criteria": "页面可用",
+          "description": "评价表单"
+        },
+        {
+          "id": "task-13",
+          "title": "数据库查询性能优化",
+          "stage_id": "stage-12",
+          "status": "in_progress",
+          "priority": "high",
+          "estimated_hours": 10,
+          "assignee_id": "user-1",
+          "depends_on": [],
+          "done_criteria": "响应时间 < 200ms",
+          "description": "索引调优"
+        },
+        {
+          "id": "task-14",
+          "title": "前端性能优化",
+          "stage_id": "stage-12",
+          "status": "todo",
+          "priority": "medium",
+          "estimated_hours": 6,
+          "assignee_id": null,
+          "depends_on": [],
+          "done_criteria": "首屏加载 < 2s",
+          "description": "代码分割和懒加载"
+        }
+      ],
+      "checkin_cycles": [
+        {
+          "id": "cycle-1",
+          "start_date": "2026-06-15",
+          "end_date": "2026-06-21",
+          "status": "active"
+        }
+      ],
+      "checkin_responses": [
+        {
+          "id": "resp-11",
+          "cycle_id": "cycle-1",
+          "user_id": "user-1",
+          "task_id": "task-13",
+          "progress": "40%",
+          "blockers": [
+            "索引优化效果不明显"
+          ],
+          "plan": "尝试物化视图方案",
+          "created_at": "2026-06-19T09:00:00+08:00"
+        }
+      ],
+      "assignment_proposals": [],
+      "assignment_responses": [],
+      "assignment_negotiations": [],
+      "resources": []
+    }
+  },
+  "expected_behavior": [
+    "识别 task-11/task-12 已 done，不应生成关于它们的推送",
+    "聚焦 task-13（in_progress + 有 blocker）给出具体推进建议",
+    "不要列出已完成任务作为待推送项"
+  ],
+  "forbidden_behavior": [
+    "为 task-11 或 task-12 生成 action card",
+    "建议重新打开已完成任务",
+    "在推送中列出已 done 任务作为需要关注的事项"
+  ],
+  "rubric_weights": {
+    "context_grounding": 0.3,
+    "mvp_boundary": 0.1,
+    "actionability": 0.2,
+    "next_action_quality": 0.2,
+    "start_guidance": 0.1,
+    "language_quality": 0.1
+  },
+  "minimum_score": 0.8,
+  "hard_fail_rules": [
+    "invalid_schema",
+    "empty_fallback"
+  ],
+  "assertions": [
+    {
+      "id": "immutable_push_not_reopen_done",
+      "group": "state_grounding",
+      "severity": "hard",
+      "evaluator": "deterministic_text",
+      "rule": "immutable_ids_not_in_proposal_context",
+      "immutable_ids": [
+        "task-11",
+        "task-12"
+      ],
+      "proposal_context_patterns": [
+        "task_id",
+        "assignee_id",
+        "recommended_owner",
+        "建议分配",
+        "推荐由",
+        "修改",
+        "调整",
+        "change",
+        "modify",
+        "reopen",
+        "重新打开",
+        "改为",
+        "变更为",
+        "推进",
+        "完成",
+        "建议",
+        "action",
+        "action_card",
+        "任务卡"
+      ],
+      "failure_category": "immutable_state_violation"
+    }
+  ]
+}

@@ -246,6 +246,45 @@ def _eval_deterministic_text(
             evidence=evidence,
         )
 
+    if rule == "immutable_ids_not_in_proposal_context":
+        immutable_ids = assertion.immutable_ids or []
+        context_patterns = assertion.proposal_context_patterns or [
+            "task_id", "assignee_id", "recommended_owner", "建议分配", "推荐由",
+            "修改", "调整", "change", "modify", "reopen", "重新打开",
+        ]
+        if not immutable_ids:
+            return _make_result(assertion, "skipped", detail="No immutable_ids configured")
+        # Combine all context patterns into one regex
+        context_re = re.compile("|".join(re.escape(p) for p in context_patterns), re.IGNORECASE)
+        violations: list[dict[str, Any]] = []
+        for eid in immutable_ids:
+            eid_re = re.compile(re.escape(eid))
+            for match in eid_re.finditer(output_text):
+                pos = match.start()
+                # Check if any context pattern appears within 300 chars
+                window = output_text[max(0, pos - 150):pos + 150]
+                ctx_match = context_re.search(window)
+                if ctx_match:
+                    violations.append({
+                        "immutable_id": eid,
+                        "position": pos,
+                        "context_pattern": ctx_match.group(0),
+                        "excerpt": window[max(0, ctx_match.start() - 40):ctx_match.end() + 40],
+                    })
+        if violations:
+            for v in violations:
+                evidence.append({
+                    "path": "agent_output.raw_text",
+                    "value": f"immutable {v['immutable_id']} near '{v['context_pattern']}': {v['excerpt'][:120]}",
+                })
+            ids = sorted({v["immutable_id"] for v in violations})
+            return _make_result(
+                assertion, "failed",
+                detail=f"Immutable IDs referenced in proposal context: {', '.join(ids)}",
+                evidence=evidence,
+            )
+        return _make_result(assertion, "passed")
+
     return _make_result(assertion, "skipped", detail=f"Unknown deterministic_text rule: {rule}")
 
 # ---------------------------------------------------------------------------

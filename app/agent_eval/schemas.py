@@ -206,6 +206,8 @@ class Assertion(BaseModel):
     forbidden: list[str] | None = None
     required: list[str] | None = None
     evidence_paths: list[str] | None = None
+    immutable_ids: list[str] | None = None  # for immutable_ids_not_in_proposal_context rule
+    proposal_context_patterns: list[str] | None = None  # context patterns that would violate immutability
     failure_category: str | None = FailureCategory.schema_failure.value
     remediation_hint: str | None = None
     payload: dict[str, Any] | None = None  # Extra evaluator-specific config
