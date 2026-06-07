@@ -56,6 +56,7 @@ def extract_entity_candidates(
     if not isinstance(agent_output, dict):
         return []
     known = _known_workspace_tokens(workspace_state)
+    known.update(build_workspace_entity_index(workspace_state).keys())
     known.update(_output_defined_ids(agent_output))
     candidates: list[SemanticCandidate] = []
     for path, value in _walk(agent_output):
