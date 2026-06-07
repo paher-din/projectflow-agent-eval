@@ -1,0 +1,23 @@
+{
+  "skill_name": "projectflow-agent-eval",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我快速跑一下 ProjectFlow AgentEval，确认本地 benchmark harness 还能正常工作。",
+      "expected_output": "Use the projectflow-agent-eval skill, run a local mock benchmark with pfae run mock, then summarize run ID, pass count, hard failures, and report path. Do not request real LLM credentials.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我第一次用这个 AgentEval real 模式，帮我配置真实 Agent 模型和辅助 Judge 模型，然后告诉我怎么跑。",
+      "expected_output": "Use pfae config init as the first-run setup flow, explain that Agent and Judge model details are both required, keep credentials outside the repository, never print full keys, then use pfae config show and pfae run real.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "把被测 agent 切到 deepseek-pro，把 judge 切到 deepseek-flash，只跑 clarify_sparse_project 这个 case，然后帮我诊断失败。",
+      "expected_output": "Use separate pfae config agent and pfae config judge commands, do not mix the registries, run the filtered real benchmark, then run pfae diagnose latest before recommending repair targets.",
+      "files": []
+    }
+  ]
+}
