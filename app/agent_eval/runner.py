@@ -1258,8 +1258,33 @@ def run_suite(
     # Write suite artifacts
     write_suite_summary(summary, output_dir)
     write_markdown_summary(summary, reports, output_dir)
+    _append_run_history(summary, output_dir)
 
     return reports, summary
+
+
+def _append_run_history(summary: SuiteSummary, output_dir: Path) -> None:
+    """Append a one-line summary to the shared HISTORY.md file."""
+    history_path = output_dir.parent / "HISTORY.md"
+    commit = summary.config.projectflow_git_commit if summary.config else ""
+    commit_short = commit[:12] if commit else "-"
+    top_failures = ", ".join(summary.top_failure_categories[:3]) if summary.top_failure_categories else "-"
+
+    is_new = not history_path.exists()
+    with open(history_path, "a", encoding="utf-8") as f:
+        if is_new:
+            f.write("# Benchmark Run History\n\n")
+            f.write("| Run ID | Mode | Cases | Score | HF | Time | PF Commit | Top Failures |\n")
+            f.write("|--------|------|-------|-------|----|------|-----------|-------------|\n")
+        f.write(
+            f"| {summary.run_id} | {summary.config.mode if summary.config else '?'} "
+            f"| {summary.cases_passed}/{summary.cases_total} "
+            f"| {summary.average_score:.3f} "
+            f"| {summary.hard_failure_count} "
+            f"| {summary.duration_seconds:.0f}s "
+            f"| {commit_short} "
+            f"| {top_failures} |\n"
+        )
 
 
 def _compute_stability_stats(run_reports: list) -> dict:
