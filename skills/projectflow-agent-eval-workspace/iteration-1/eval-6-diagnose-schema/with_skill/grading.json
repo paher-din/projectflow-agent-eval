@@ -1,0 +1,11 @@
+{
+  "eval_id": 6,
+  "eval_name": "diagnose-schema",
+  "configuration": "with_skill",
+  "expectations": [
+    {"text": "Agent runs pfae diagnose to inspect failures", "passed": true, "evidence": "Ran 'pfae diagnose output/agent-eval/20260607T194202-real-d14d4a'"},
+    {"text": "Agent distinguishes schema/infrastructure failures from quality failures", "passed": true, "evidence": "Explicitly classified as 'Infrastructure failure -- not an agent quality issue'"},
+    {"text": "Agent recommends pfae sync as a fix step, not prompt/code changes", "passed": false, "evidence": "Recommended 'pfae run real' (which auto-syncs), but also suggested code changes to _patch_app_path. Did not explicitly recommend 'pfae sync' as the primary fix."},
+    {"text": "Agent suggests running pfae run mock to verify fixture compatibility", "passed": true, "evidence": "Ran 'pfae run mock' and reported 49/49 passed as evidence"}
+  ]
+}

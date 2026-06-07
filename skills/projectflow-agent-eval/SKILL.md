@@ -24,6 +24,7 @@ Map the user's request to one of these paths:
 | Add or switch auxiliary judge model | Use `pfae config judge ...` |
 | Inspect available benchmark cases | Use `pfae case list` or `pfae case show <case_id>` |
 | Explain a run result | Use `pfae report latest` or `pfae report show <run_dir>` |
+| View all run history | Read `output/agent-eval/HISTORY.md` |
 | Find likely repair targets | Use `pfae diagnose latest` before recommending fixes |
 | Compare quality across two runs | Use `pfae compare <baseline> <candidate>` |
 
@@ -117,6 +118,10 @@ Prefer the smallest run that answers the user:
 3. For a focused rerun, add `--case-filter <case_id>` if the user names cases.
 4. For flaky or stability-sensitive behavior, use `--runs-per-case <n>`.
 5. After a failed run, run `pfae diagnose latest` before proposing code or prompt changes.
+
+Every run automatically appends a one-line summary to `output/agent-eval/HISTORY.md`
+(run ID, mode, pass rate, score, hard failures, duration, commit, top failures).
+To view all historical results at a glance, read that file.
 
 ### Diagnosing Failures
 

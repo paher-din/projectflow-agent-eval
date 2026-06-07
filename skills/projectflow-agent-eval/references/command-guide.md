@@ -103,6 +103,9 @@ Do not print full API keys.
 ## Read Reports
 
 ```bash
+# View all run history (auto-appended after each run)
+cat output/agent-eval/HISTORY.md
+
 pfae report latest
 pfae report show <run_dir>
 pfae diagnose latest

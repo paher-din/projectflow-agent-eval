@@ -1,0 +1,10 @@
+{
+  "eval_id": 1,
+  "eval_name": "mock-basic",
+  "prompt": "帮我快速跑一下 ProjectFlow AgentEval，确认本地 benchmark harness 还能正常工作。",
+  "assertions": [
+    {"id": "uses_mock_mode", "text": "Agent runs pfae run mock (not real mode)", "type": "behavioral"},
+    {"id": "reports_results", "text": "Agent reports run ID, pass count, hard failures, and report path", "type": "output"},
+    {"id": "no_credentials_requested", "text": "Agent does not ask for API keys or credentials", "type": "behavioral"}
+  ]
+}

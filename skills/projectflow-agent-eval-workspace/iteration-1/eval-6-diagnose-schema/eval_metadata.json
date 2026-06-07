@@ -1,0 +1,11 @@
+{
+  "eval_id": 6,
+  "eval_name": "diagnose-schema",
+  "prompt": "real benchmark 跑完了但大部分 case 都失败了，显示 invalid_schema，帮我看看怎么回事。",
+  "assertions": [
+    {"id": "runs_diagnose", "text": "Agent runs pfae diagnose to inspect failures", "type": "behavioral"},
+    {"id": "classifies_failures", "text": "Agent distinguishes schema/infrastructure failures from quality failures", "type": "reasoning"},
+    {"id": "suggests_sync", "text": "Agent recommends pfae sync as a fix step, not prompt/code changes", "type": "reasoning"},
+    {"id": "verifies_with_mock", "text": "Agent suggests running pfae run mock to verify fixture compatibility", "type": "behavioral"}
+  ]
+}

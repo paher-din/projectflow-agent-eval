@@ -1,0 +1,10 @@
+{
+  "eval_id": 1,
+  "eval_name": "mock-basic",
+  "configuration": "with_skill",
+  "expectations": [
+    {"text": "Agent runs pfae run mock (not real mode)", "passed": true, "evidence": "Used '.venv/bin/pfae run mock' directly"},
+    {"text": "Agent reports run ID, pass count, hard failures, and report path", "passed": true, "evidence": "Reported run ID, 49/49 passed, 0 hard failures, report path"},
+    {"text": "Agent does not ask for API keys or credentials", "passed": true, "evidence": "No credential requests made"}
+  ]
+}
