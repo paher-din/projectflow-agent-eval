@@ -57,6 +57,28 @@ def _build_parser() -> argparse.ArgumentParser:
     config_sub.add_parser("show", help="Show masked user config")
     config_sub.add_parser("path", help="Show user config path")
 
+    # config agent
+    config_agent = config_sub.add_parser("agent", help="Manage Agent model entries")
+    config_agent_sub = config_agent.add_subparsers(dest="config_agent_command")
+    agent_add = config_agent_sub.add_parser("add", help="Add Agent model entry")
+    agent_add.add_argument("name")
+    agent_use = config_agent_sub.add_parser("use", help="Switch to Agent model entry")
+    agent_use.add_argument("name")
+    config_agent_sub.add_parser("list", help="List Agent model entries")
+    agent_show = config_agent_sub.add_parser("show", help="Show Agent model entry")
+    agent_show.add_argument("name")
+
+    # config judge
+    config_judge = config_sub.add_parser("judge", help="Manage Judge model entries")
+    config_judge_sub = config_judge.add_subparsers(dest="config_judge_command")
+    judge_add = config_judge_sub.add_parser("add", help="Add Judge model entry")
+    judge_add.add_argument("name")
+    judge_use = config_judge_sub.add_parser("use", help="Switch to Judge model entry")
+    judge_use.add_argument("name")
+    config_judge_sub.add_parser("list", help="List Judge model entries")
+    judge_show = config_judge_sub.add_parser("show", help="Show Judge model entry")
+    judge_show.add_argument("name")
+
     return parser
 
 
@@ -128,7 +150,37 @@ def _dispatch(args: argparse.Namespace) -> int:
             return config_commands.config_show()
         if args.config_command == "path":
             return config_commands.config_path_command()
+        if args.config_command == "agent":
+            return _dispatch_config_agent(args, config_commands)
+        if args.config_command == "judge":
+            return _dispatch_config_judge(args, config_commands)
     raise CommandError("No command selected. Run `pfae --help`.")
+
+
+def _dispatch_config_agent(args: argparse.Namespace, config_commands: object) -> int:
+    cmd = getattr(args, "config_agent_command", None)
+    if cmd == "add":
+        return config_commands.config_agent_add(args.name)
+    if cmd == "use":
+        return config_commands.config_agent_use(args.name)
+    if cmd == "list":
+        return config_commands.config_agent_list()
+    if cmd == "show":
+        return config_commands.config_agent_show(args.name)
+    raise CommandError("No agent command selected. Run `pfae config agent --help`.")
+
+
+def _dispatch_config_judge(args: argparse.Namespace, config_commands: object) -> int:
+    cmd = getattr(args, "config_judge_command", None)
+    if cmd == "add":
+        return config_commands.config_judge_add(args.name)
+    if cmd == "use":
+        return config_commands.config_judge_use(args.name)
+    if cmd == "list":
+        return config_commands.config_judge_list()
+    if cmd == "show":
+        return config_commands.config_judge_show(args.name)
+    raise CommandError("No judge command selected. Run `pfae config judge --help`.")
 
 
 def _is_legacy_runner_invocation(argv: list[str]) -> bool:

@@ -19,6 +19,11 @@ Use this skill when the user asks to run ProjectFlow AgentEval, benchmark the Pr
 
 When real mode lacks provider configuration, run `pfae config init`. Do not ask the user to put keys in `.env` unless they explicitly prefer that. Use `pfae config show` to confirm configured model names; never display full API keys.
 
+Agent and judge models are managed as separate named registries. Do not use `config judge ...` commands to manage Agent models or `config agent ...` commands to manage Judge models. The two registries are independent:
+
+- `pfae config agent add <name>` / `pfae config agent use <name>` / `pfae config agent list` / `pfae config agent show <name>`
+- `pfae config judge add <name>` / `pfae config judge use <name>` / `pfae config judge list` / `pfae config judge show <name>`
+
 ## Safety Boundaries
 
 - Do not edit `.env`, keys, tokens, CI/CD configuration, or provider credentials.

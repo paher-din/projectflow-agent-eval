@@ -65,6 +65,25 @@ After setup:
 pfae run real
 ```
 
+### Add Or Switch Models
+
+Agent and judge models are managed separately. Add and switch them independently:
+
+```powershell
+pfae config agent add deepseek-pro
+pfae config agent use deepseek-pro
+pfae config agent list
+
+pfae config judge add deepseek-flash
+pfae config judge use deepseek-flash
+pfae config judge list
+```
+
+`pfae config show` displays the current Agent model and current Judge model.
+`pfae config agent show <name>` and `pfae config judge show <name>` show a specific entry with the API key masked.
+
+`pfae run real` uses the current Agent model settings for `LLM_*` values and the current Judge model settings for `SEMANTIC_JUDGE_*` values.
+
 ## Run Offline Benchmark
 
 ```powershell

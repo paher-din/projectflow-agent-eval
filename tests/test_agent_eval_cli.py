@@ -276,3 +276,59 @@ def test_run_real_ensures_config_before_runner(monkeypatch: pytest.MonkeyPatch) 
 
     assert run_commands.run_benchmark("real") == 0
     assert calls == ["config", "run"]
+
+
+def test_cli_config_agent_use_dispatches(monkeypatch: pytest.MonkeyPatch) -> None:
+    import app.agent_eval.commands.config as config_commands
+    monkeypatch.setattr(config_commands, "config_agent_use", lambda name, **kwargs: 0)
+
+    assert main(["config", "agent", "use", "agent-main"]) == 0
+
+
+def test_cli_config_agent_add_dispatches(monkeypatch: pytest.MonkeyPatch) -> None:
+    import app.agent_eval.commands.config as config_commands
+    monkeypatch.setattr(config_commands, "config_agent_add", lambda name, **kwargs: 0)
+
+    assert main(["config", "agent", "add", "agent-new"]) == 0
+
+
+def test_cli_config_agent_list_dispatches(monkeypatch: pytest.MonkeyPatch) -> None:
+    import app.agent_eval.commands.config as config_commands
+    monkeypatch.setattr(config_commands, "config_agent_list", lambda config=None: 0)
+
+    assert main(["config", "agent", "list"]) == 0
+
+
+def test_cli_config_agent_show_dispatches(monkeypatch: pytest.MonkeyPatch) -> None:
+    import app.agent_eval.commands.config as config_commands
+    monkeypatch.setattr(config_commands, "config_agent_show", lambda name, config=None: 0)
+
+    assert main(["config", "agent", "show", "agent-main"]) == 0
+
+
+def test_cli_config_judge_use_dispatches(monkeypatch: pytest.MonkeyPatch) -> None:
+    import app.agent_eval.commands.config as config_commands
+    monkeypatch.setattr(config_commands, "config_judge_use", lambda name, **kwargs: 0)
+
+    assert main(["config", "judge", "use", "judge-main"]) == 0
+
+
+def test_cli_config_judge_add_dispatches(monkeypatch: pytest.MonkeyPatch) -> None:
+    import app.agent_eval.commands.config as config_commands
+    monkeypatch.setattr(config_commands, "config_judge_add", lambda name, **kwargs: 0)
+
+    assert main(["config", "judge", "add", "judge-new"]) == 0
+
+
+def test_cli_config_judge_list_dispatches(monkeypatch: pytest.MonkeyPatch) -> None:
+    import app.agent_eval.commands.config as config_commands
+    monkeypatch.setattr(config_commands, "config_judge_list", lambda config=None: 0)
+
+    assert main(["config", "judge", "list"]) == 0
+
+
+def test_cli_config_judge_show_dispatches(monkeypatch: pytest.MonkeyPatch) -> None:
+    import app.agent_eval.commands.config as config_commands
+    monkeypatch.setattr(config_commands, "config_judge_show", lambda name, config=None: 0)
+
+    assert main(["config", "judge", "show", "judge-main"]) == 0

@@ -27,6 +27,22 @@ pfae config init
 pfae config show
 ```
 
+Agent and judge models are managed as separate registries:
+
+```powershell
+pfae config agent add <name>
+pfae config agent use <name>
+pfae config agent list
+pfae config agent show <name>
+
+pfae config judge add <name>
+pfae config judge use <name>
+pfae config judge list
+pfae config judge show <name>
+```
+
+Do not use `config judge ...` commands to manage Agent models or `config agent ...` commands to manage Judge models.
+
 `pfae run real` starts setup automatically when no environment or user config exists.
 
 ## Read Reports
