@@ -29,7 +29,7 @@ This is a standalone AgentEval benchmark harness for ProjectFlow agent outputs. 
 - LLM judge may evaluate semantic quality, but must not be the sole source of hard failures for deterministic facts.
 - When asked to run the benchmark, prefer `pfae run mock` for fast local checks; use `pfae run real` only with existing provider config. The `--model` flag on `pfae run` is a reporting/cache label — switch the active model via `pfae config agent use <name>` or `pfae config judge use <name>` instead.
 - For real mode testing against the main ProjectFlow Agent code (not this repo's snapshot), use `--projectflow-root <path>` or set `PROJECTFLOW_ROOT`. This makes `app.agent.*` imports resolve to the external checkout via `app.__path__` extension. The run metadata records the source path and git commit.
-- The benchmark suite has 35 cases across 10 modules (3-4 per module). Mock mode passes all 35; real mode results depend on Agent quality.
+- The benchmark suite has 43 cases across 10 modules (4-5 per module), including 8 warm-state fixtures that test Agent behavior with accumulated workspace state (multiple cycles, existing tasks, rejected proposals). Mock mode passes all 43; real mode results depend on Agent quality.
 
 ## Public Repository Safety
 
