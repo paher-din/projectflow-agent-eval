@@ -10,7 +10,7 @@ from app.schemas.workspace_state import WorkspaceStateResponse
 
 
 def build_request(workspace_state: WorkspaceStateResponse) -> AgentModuleRequest:
-    stage_id = first_stage_id(workspace_state) or "unassigned"
+    stage_id = first_stage_id(workspace_state) or None
     stage_name = first_stage_name_or_default(workspace_state)
     project_name = project_name_or_default(workspace_state)
     due_date = project_deadline_or_today(workspace_state).isoformat()
@@ -33,6 +33,7 @@ def build_request(workspace_state: WorkspaceStateResponse) -> AgentModuleRequest
                     "dependency_ids": [],
                     "acceptance_criteria": ["验收标准可被团队成员直接判断", "至少列出 1 项可推迟范围"],
                     "can_cut": False,
+                    "order_index": 0,
                     "reason": "P0 先保证阶段目标清晰，避免后续任务偏离演示闭环。",
                 },
                 {
@@ -45,6 +46,7 @@ def build_request(workspace_state: WorkspaceStateResponse) -> AgentModuleRequest
                     "dependency_ids": [],
                     "acceptance_criteria": ["核心路径可以被手动走通", "关键页面或接口有明确输出"],
                     "can_cut": False,
+                    "order_index": 1,
                     "reason": "P1 聚焦能证明项目价值的核心交付物。",
                 },
                 {
@@ -57,6 +59,7 @@ def build_request(workspace_state: WorkspaceStateResponse) -> AgentModuleRequest
                     "dependency_ids": [],
                     "acceptance_criteria": ["演示说明可读", "至少列出 2 个风险和应对动作"],
                     "can_cut": True,
+                    "order_index": 2,
                     "reason": "P2 提升展示质量，但时间不足时可以压缩。",
                 },
             ],

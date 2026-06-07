@@ -126,10 +126,13 @@
           "status": "in_progress",
           "priority": "medium",
           "estimated_hours": 0,
-          "assignee_id": "user-2",
-          "depends_on": [],
-          "done_criteria": "N/A",
-          "description": "仅用于让 mock output 中的 task-1 引用合法化"
+          "description": "仅用于让 mock output 中的 task-1 引用合法化",
+          "owner_user_id": "user-2",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "N/A"
+          ]
         },
         {
           "id": "task-11",
@@ -138,10 +141,13 @@
           "status": "done",
           "priority": "high",
           "estimated_hours": 16,
-          "assignee_id": "user-1",
-          "depends_on": [],
-          "done_criteria": "API 可用",
-          "description": "课程搜索接口"
+          "description": "课程搜索接口",
+          "owner_user_id": "user-1",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "API 可用"
+          ]
         },
         {
           "id": "task-12",
@@ -150,10 +156,13 @@
           "status": "done",
           "priority": "high",
           "estimated_hours": 12,
-          "assignee_id": "user-2",
-          "depends_on": [],
-          "done_criteria": "页面可用",
-          "description": "评价表单"
+          "description": "评价表单",
+          "owner_user_id": "user-2",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "页面可用"
+          ]
         },
         {
           "id": "task-13",
@@ -162,10 +171,13 @@
           "status": "in_progress",
           "priority": "high",
           "estimated_hours": 10,
-          "assignee_id": "user-1",
-          "depends_on": [],
-          "done_criteria": "响应时间 < 200ms",
-          "description": "索引调优"
+          "description": "索引调优",
+          "owner_user_id": "user-1",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "响应时间 < 200ms"
+          ]
         },
         {
           "id": "task-14",
@@ -174,10 +186,13 @@
           "status": "todo",
           "priority": "medium",
           "estimated_hours": 6,
-          "assignee_id": null,
-          "depends_on": [],
-          "done_criteria": "首屏加载 < 2s",
-          "description": "代码分割和懒加载"
+          "description": "代码分割和懒加载",
+          "owner_user_id": null,
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "首屏加载 < 2s"
+          ]
         }
       ],
       "checkin_cycles": [],

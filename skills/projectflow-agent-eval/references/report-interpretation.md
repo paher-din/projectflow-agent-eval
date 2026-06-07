@@ -26,6 +26,32 @@ Keep the repair target narrow. Prefer "fix the validator expectation", "adjust
 the fixture workspace state", "repair the agent output for module X", or "rerun
 case Y with real mode" over broad project refactors.
 
+## Classifying Failures
+
+Before recommending code or prompt changes, classify each failure.
+Do not analyze internal CLI source code — focus on commands and output.
+
+**Quick triage** (follow this order):
+1. If most cases show `invalid_schema` or `agent_status: "failed"` → infrastructure failure
+2. Run `pfae run mock` — if mock passes, harness and fixtures are fine
+3. Fix: `pfae run real` (auto-syncs). Do NOT suggest code changes.
+
+**Infrastructure failures** (not agent quality issues):
+- `invalid_schema` + `Agent output is NoneType` — agent invocation crashed
+- `invalid_schema` + `Field required` on `WorkspaceStateResponse` — fixture mismatch
+- `empty_fallback` — agent hit an error and fell back to minimal output
+
+**Quality failures** (these are the real findings):
+- `scope_creep` — agent suggests work outside the project scope
+- `weak_actionability` — suggestions aren't concrete enough
+- `no_op_replan` — agent doesn't make meaningful changes when it should
+- `dependency_inconsistency` — ordering without dependency declarations
+- `immutable_state_violation` — agent tries to modify completed/accepted state
+- `date_time_error` — date logic mistakes
+- `hallucinated_entity` — agent invents team members or tasks that don't exist
+
+Only suggest agent code/prompt changes for quality failures.
+
 ## What Counts as Strong Evidence
 
 Treat these as strong evidence:

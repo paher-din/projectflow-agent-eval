@@ -92,6 +92,7 @@ class TaskBreakdownItem(BaseModel):
     dependency_ids: list[str] = Field(default_factory=list)
     acceptance_criteria: list[str] = Field(default_factory=list)
     can_cut: bool = False
+    order_index: int = Field(default=0, ge=0, description="Sort order within the stage")
     reason: str = Field(min_length=1)
 
 
@@ -276,7 +277,10 @@ def _validate_references(output: AgentOutputBase, workspace_state: WorkspaceStat
 
     if isinstance(output, TaskBreakdownOutput):
         for task in output.tasks:
-            check(task.stage_id, stage_ids, "stage_id")
+            # Only check stage_id when stages actually exist; tasks created
+            # before stages are confirmed can reference stage_id=None.
+            if stage_ids:
+                check(task.stage_id, stage_ids, "stage_id")
             for dependency_id in task.dependency_ids:
                 check(dependency_id, task_ids, "dependency_ids")
 

@@ -112,18 +112,22 @@
           "status": "in_progress",
           "priority": "high",
           "estimated_hours": 16,
-          "assignee_id": "user-1",
-          "depends_on": [],
-          "done_criteria": "API 可用",
-          "description": "课程搜索接口"
+          "description": "课程搜索接口",
+          "owner_user_id": "user-1",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "API 可用"
+          ]
         }
       ],
       "checkin_cycles": [
         {
           "id": "cycle-1",
-          "start_date": "2026-07-01",
-          "end_date": "2026-07-07",
-          "status": "closed"
+          "status": "closed",
+          "stage_id": "stage-1",
+          "cadence_days": 7,
+          "next_due_date": "2026-07-07"
         }
       ],
       "checkin_responses": [
@@ -132,12 +136,8 @@
           "cycle_id": "cycle-1",
           "user_id": "user-1",
           "task_id": "task-1",
-          "progress": "50%",
-          "blockers": [
-            "数据库性能问题"
-          ],
-          "plan": "继续优化查询",
-          "created_at": "2026-07-05T10:00:00+08:00"
+          "what_done": "50%",
+          "blocker": "数据库性能问题"
         }
       ],
       "assignment_proposals": [],

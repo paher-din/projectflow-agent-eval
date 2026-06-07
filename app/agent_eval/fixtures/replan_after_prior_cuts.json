@@ -112,10 +112,13 @@
           "status": "in_progress",
           "priority": "high",
           "estimated_hours": 12,
-          "assignee_id": "user-1",
-          "depends_on": [],
-          "done_criteria": "API 可用",
-          "description": "最核心功能"
+          "description": "最核心功能",
+          "owner_user_id": "user-1",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "API 可用"
+          ]
         },
         {
           "id": "task-2",
@@ -124,10 +127,13 @@
           "status": "in_progress",
           "priority": "high",
           "estimated_hours": 8,
-          "assignee_id": "user-2",
-          "depends_on": [],
-          "done_criteria": "页面可用",
-          "description": "核心功能"
+          "description": "核心功能",
+          "owner_user_id": "user-2",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "页面可用"
+          ]
         }
       ],
       "checkin_cycles": [],

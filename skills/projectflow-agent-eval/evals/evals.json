@@ -18,6 +18,24 @@
       "prompt": "把被测 agent 切到 deepseek-pro，把 judge 切到 deepseek-flash，只跑 clarify_sparse_project 这个 case，然后帮我诊断失败。",
       "expected_output": "Use separate pfae config agent and pfae config judge commands, do not mix the registries, run the filtered real benchmark, then run pfae diagnose latest before recommending repair targets.",
       "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "我刚在 ProjectFlow 里优化了 planning 模块的 prompt，还没提交，想用 benchmark 看看效果。ProjectFlow 在 /Users/me/Projects/ProjectFlow。",
+      "expected_output": "Set PROJECTFLOW_ROOT env var, then run pfae run real (which auto-syncs). The run records dirty state in metadata. Then compare with a previous run using pfae compare.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "帮我对比一下这次 benchmark 和上次的结果，看看 ProjectFlow 的 agent 质量有没有提升。",
+      "expected_output": "Use pfae compare with the two run directories. Show the diff report including ProjectFlow commit versions for each run, per-case score deltas, new/fixed hard failures, and regression gate result.",
+      "files": []
+    },
+    {
+      "id": 6,
+      "prompt": "real benchmark 跑完了但大部分 case 都失败了，显示 invalid_schema，帮我看看怎么回事。",
+      "expected_output": "Run pfae diagnose latest. Classify failures: if all/most cases show invalid_schema with 'Agent output is NoneType' or 'Field required' errors, this is a sync or fixture alignment issue, not a real agent quality problem. Recommend running pfae sync first, then pfae run mock to verify fixture schema compatibility. Only suggest prompt/code changes for cases that pass schema validation but score low on quality dimensions.",
+      "files": []
     }
   ]
 }

@@ -1125,10 +1125,21 @@ def run_suite(
     selected_semantic_judge_model = _selected_semantic_judge_model(semantic_judge_model)
     selected_semantic_judge_base_url = _selected_semantic_judge_base_url(semantic_judge_base_url)
 
-    # Resolve external ProjectFlow agent metadata
+    # Resolve external ProjectFlow agent metadata.
+    # Prefer .sync_meta.json (written by `pfae sync`) which includes dirty state.
     resolved_projectflow_root = ""
     projectflow_git_commit = ""
-    if projectflow_root:
+    sync_meta_path = Path(__file__).resolve().parents[1] / "agent" / ".sync_meta.json"
+    if sync_meta_path.is_file():
+        try:
+            sync_meta = json.loads(sync_meta_path.read_text())
+            commit = sync_meta.get("commit", "")
+            dirty = sync_meta.get("dirty") == "true"
+            projectflow_git_commit = f"{commit}+dirty" if dirty and commit else commit
+            resolved_projectflow_root = sync_meta.get("source_path", "")
+        except Exception:
+            logger.warning("Failed to read sync metadata from %s", sync_meta_path)
+    elif projectflow_root:
         resolved_projectflow_root = str(Path(projectflow_root).resolve())
         try:
             result = subprocess.run(
@@ -1590,6 +1601,12 @@ def _cmd_compare(args: argparse.Namespace) -> int:
 
     print(f"\n{'='*60}")
     print(f"  Comparison: {diff.baseline_run_id} -> {diff.candidate_run_id}")
+    if diff.baseline_commit or diff.candidate_commit:
+        base_label = diff.baseline_commit or "unknown"
+        cand_label = diff.candidate_commit or "unknown"
+        print(f"  ProjectFlow: {base_label} -> {cand_label}")
+        if diff.version_changed:
+            print(f"  ** Version changed **")
     print(f"  Average Delta: {diff.average_score_delta:+.4f}")
     print(f"  Regression Passed: {'Y' if diff.regression_passed else 'N'}")
     print(f"{'='*60}\n")

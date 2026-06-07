@@ -35,6 +35,7 @@ class AgentModuleRequest:
     event_type: AgentEventType
     user_prompt: str
     fallback_payload: dict[str, Any]
+    user_instruction: str | None = None
 
 
 def project_deadline_or_today(workspace_state: WorkspaceStateResponse) -> date:

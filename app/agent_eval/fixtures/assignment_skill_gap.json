@@ -90,10 +90,13 @@
           "status": "todo",
           "priority": "high",
           "estimated_hours": 24,
-          "assignee_id": null,
-          "depends_on": [],
-          "done_criteria": "模型可以正确推理并返回结果",
-          "description": "需要熟悉 PyTorch、CUDA、模型部署"
+          "description": "需要熟悉 PyTorch、CUDA、模型部署",
+          "owner_user_id": null,
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "模型可以正确推理并返回结果"
+          ]
         }
       ],
       "checkin_cycles": [],

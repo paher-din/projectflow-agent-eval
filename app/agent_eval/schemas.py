@@ -500,3 +500,6 @@ class DiffReport(BaseModel):
     entries: list[DiffEntry] = Field(default_factory=list)
     regression_passed: bool = True
     regression_notes: list[str] = Field(default_factory=list)
+    baseline_commit: str = ""
+    candidate_commit: str = ""
+    version_changed: bool = False

@@ -126,10 +126,13 @@
           "status": "done",
           "priority": "high",
           "estimated_hours": 16,
-          "assignee_id": "user-1",
-          "depends_on": [],
-          "done_criteria": "API 可用",
-          "description": "搜索接口"
+          "description": "搜索接口",
+          "owner_user_id": "user-1",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "API 可用"
+          ]
         },
         {
           "id": "task-2",
@@ -138,10 +141,13 @@
           "status": "done",
           "priority": "high",
           "estimated_hours": 12,
-          "assignee_id": "user-2",
-          "depends_on": [],
-          "done_criteria": "页面可用",
-          "description": "评价表单"
+          "description": "评价表单",
+          "owner_user_id": "user-2",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "页面可用"
+          ]
         },
         {
           "id": "task-3",
@@ -150,10 +156,13 @@
           "status": "in_progress",
           "priority": "high",
           "estimated_hours": 10,
-          "assignee_id": "user-1",
-          "depends_on": [],
-          "done_criteria": "响应时间 < 200ms",
-          "description": "数据库查询优化"
+          "description": "数据库查询优化",
+          "owner_user_id": "user-1",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "响应时间 < 200ms"
+          ]
         }
       ],
       "checkin_cycles": [],

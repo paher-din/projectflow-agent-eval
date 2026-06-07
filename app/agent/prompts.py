@@ -1,7 +1,49 @@
 import json
+import logging
+import os
+from html import escape
 
 from app.models.enums import AgentEventType
 from app.schemas.workspace_state import WorkspaceStateResponse
+
+logger = logging.getLogger(__name__)
+
+# Agent 读取本地文件时会搜索的目录
+_AGENT_FILE_SEARCH_PATHS = [
+    os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), "backend", "data", "uploads"),
+    r"D:\ProjectFlow_Agent",
+]
+
+_MAX_RESOURCE_FILE_BYTES = 8000
+
+
+def _read_resource_file(file_name: str) -> str | None:
+    """尝试从已知目录查找并读取资源文件内容。"""
+    # 如果是绝对路径，先尝试直接读取
+    if os.path.isabs(file_name) and os.path.isfile(file_name):
+        try:
+            with open(file_name, encoding="utf-8") as f:
+                return f.read(_MAX_RESOURCE_FILE_BYTES)
+        except Exception:
+            pass
+
+    # 在已知搜索目录中按文件名查找
+    base = os.path.basename(file_name)  # 去掉可能的前缀路径
+    for search_dir in _AGENT_FILE_SEARCH_PATHS:
+        if not os.path.isdir(search_dir):
+            continue
+        candidate = os.path.join(search_dir, base)
+        if os.path.isfile(candidate):
+            try:
+                with open(candidate, encoding="utf-8") as f:
+                    content = f.read(_MAX_RESOURCE_FILE_BYTES)
+                    logger.info("Agent read resource file: %s (%d chars)", candidate, len(content))
+                    return content
+            except Exception as exc:
+                logger.warning("Agent could not read %s: %s", candidate, exc)
+                continue
+
+    return None
 
 
 AGENT_SYSTEM_PROMPT = """You are ProjectFlow's Coordinator Agent for Chinese-speaking student teams.
@@ -25,8 +67,8 @@ Each stage: "name" string, "goal" string, "start_date" YYYY-MM-DD, "end_date" YY
 Return 3 lean stages within the project deadline unless current state clearly needs fewer.""",
     AgentEventType.breakdown: """TaskBreakdownOutput JSON object:
 Required keys: "tasks" array, "reason" string, "requires_confirmation" true.
-Each task: "stage_id" existing stage id or null, "title" string, "description" string, "priority" one of P0/P1/P2, "due_date" YYYY-MM-DD, "estimated_hours" number, "dependency_ids" existing task id array, "acceptance_criteria" string[], "can_cut" boolean, "reason" string.
-Use only existing stage_id and dependency_ids from WorkspaceState.""",
+Each task: "stage_id" existing stage id or null, "title" string, "description" string, "priority" one of P0/P1/P2, "due_date" YYYY-MM-DD, "estimated_hours" number, "dependency_ids" existing task id array, "acceptance_criteria" string[], "can_cut" boolean, "order_index" integer >=0, "reason" string.
+Use only existing stage_id and dependency_ids from WorkspaceState. Assign order_index in execution order: 0 first, then 1, 2, etc.""",
     AgentEventType.assign: """AssignmentRecommendationOutput JSON object:
 Required keys: "assignments" array, "reason" string, "requires_confirmation" true.
 Each assignment: "task_id" existing task id, "recommended_owner_user_id" existing member id, "backup_owner_user_id" existing member id or null, "reason" string, "skill_match" string, "availability_match" string, "preference_match" string, "constraint_respected" string, "risk_note" string or null.
@@ -220,16 +262,22 @@ def _compact_workspace_state_json(event_type: AgentEventType, workspace_state: W
             AgentEventType.plan,
             AgentEventType.breakdown,
         } and project.resources:
-            payload["project"]["resources"] = [
-                _without_none({
+            rich_resources = []
+            for r in project.resources:
+                entry: dict = {
                     "type": r.type,
                     "title": r.title,
-                    "summary": r.content_text[:150] if r.content_text else None,
                     "file_name": r.file_name,
                     "url": r.url,
-                })
-                for r in project.resources
-            ]
+                }
+                if r.content_text:
+                    entry["summary"] = r.content_text[:3000]
+                elif r.type == "file_stub" and r.file_name:
+                    file_content = _read_resource_file(r.file_name)
+                    if file_content:
+                        entry["summary"] = file_content
+                rich_resources.append(_without_none(entry))
+            payload["project"]["resources"] = rich_resources
     return json.dumps(
         _without_none(payload),
         ensure_ascii=False,
@@ -242,6 +290,7 @@ def build_prompt_messages(
     event_type: AgentEventType,
     workspace_state: WorkspaceStateResponse,
     user_prompt: str,
+    user_instruction: str | None = None,
 ) -> list[dict[str, str]]:
     # Inject current date/time/timezone info for the LLM
     current_date = workspace_state.current_date or "未知"
@@ -253,6 +302,14 @@ def build_prompt_messages(
         f"当前时间: {current_datetime}\n"
         f"时区: {timezone}\n\n"
     )
+    instruction_text = escape(user_instruction.strip(), quote=False) if user_instruction else ""
+    instruction_block = (
+        "<user_instruction>\n"
+        f"{instruction_text}\n"
+        "</user_instruction>\n\n"
+        if instruction_text
+        else ""
+    )
     return [
         {"role": "system", "content": AGENT_SYSTEM_PROMPT},
         {
@@ -262,6 +319,10 @@ def build_prompt_messages(
                 f"<time_info>\n{time_header}</time_info>\n\n"
                 f"<output_schema>\n{_output_contract(event_type)}\n</output_schema>\n\n"
                 f"<workspace_state>\n{_compact_workspace_state_json(event_type, workspace_state)}\n</workspace_state>\n\n"
+                f"{instruction_block}"
+                "If <user_instruction> is present, follow it as the user's concrete request. "
+                "If it conflicts with workspace facts, human-confirmation rules, or the output schema, "
+                "do not invent data or bypass confirmation; explain the conflict in user-visible Chinese fields.\n\n"
                 f"Task:\n{user_prompt}"
             ),
         },

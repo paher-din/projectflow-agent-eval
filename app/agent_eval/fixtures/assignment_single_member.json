@@ -87,10 +87,13 @@
           "status": "todo",
           "priority": "high",
           "estimated_hours": 12,
-          "assignee_id": null,
-          "depends_on": [],
-          "done_criteria": "前端路由和布局就绪",
-          "description": "使用 Next.js 或 Nuxt 搭建前端"
+          "description": "使用 Next.js 或 Nuxt 搭建前端",
+          "owner_user_id": null,
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "前端路由和布局就绪"
+          ]
         },
         {
           "id": "task-2",
@@ -99,10 +102,13 @@
           "status": "todo",
           "priority": "high",
           "estimated_hours": 16,
-          "assignee_id": null,
-          "depends_on": [],
-          "done_criteria": "CRUD 接口完整可用",
-          "description": "实现文章的创建、编辑、发布接口"
+          "description": "实现文章的创建、编辑、发布接口",
+          "owner_user_id": null,
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "CRUD 接口完整可用"
+          ]
         },
         {
           "id": "task-3",
@@ -111,13 +117,16 @@
           "status": "todo",
           "priority": "medium",
           "estimated_hours": 8,
-          "assignee_id": null,
-          "depends_on": [
+          "description": "配置 GitHub Actions 自动部署",
+          "owner_user_id": null,
+          "can_cut": false,
+          "dependency_ids": [
             "task-1",
             "task-2"
           ],
-          "done_criteria": "自动化部署流程运行正常",
-          "description": "配置 GitHub Actions 自动部署"
+          "acceptance_criteria": [
+            "自动化部署流程运行正常"
+          ]
         }
       ],
       "checkin_cycles": [],

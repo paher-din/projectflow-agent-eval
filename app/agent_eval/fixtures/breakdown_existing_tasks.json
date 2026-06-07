@@ -112,10 +112,13 @@
           "status": "done",
           "priority": "high",
           "estimated_hours": 8,
-          "assignee_id": null,
-          "depends_on": [],
-          "done_criteria": "Schema 文档完成并评审通过",
-          "description": "设计课程、评价、用户等核心表结构"
+          "description": "设计课程、评价、用户等核心表结构",
+          "owner_user_id": null,
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "Schema 文档完成并评审通过"
+          ]
         },
         {
           "id": "task-2",
@@ -124,12 +127,15 @@
           "status": "in_progress",
           "priority": "high",
           "estimated_hours": 16,
-          "assignee_id": null,
-          "depends_on": [
+          "description": "基于 Elasticsearch 或 SQL 实现搜索",
+          "owner_user_id": null,
+          "can_cut": false,
+          "dependency_ids": [
             "task-1"
           ],
-          "done_criteria": "API 返回正确搜索结果",
-          "description": "基于 Elasticsearch 或 SQL 实现搜索"
+          "acceptance_criteria": [
+            "API 返回正确搜索结果"
+          ]
         }
       ],
       "checkin_cycles": [],

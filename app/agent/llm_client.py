@@ -1,9 +1,11 @@
 import json
 import logging
+import time
+from collections.abc import Iterator
 from dataclasses import dataclass
 from typing import Any, Protocol
-
-import httpx
+from urllib import error as urllib_error
+from urllib import request
 
 from app.core.config import settings as app_settings
 
@@ -52,6 +54,12 @@ class LLMClient(Protocol):
     def complete(self, messages: list[dict[str, str]], *, max_tokens: int | None = None) -> str:
         """Return the assistant message content."""
 
+    def stream_complete(
+        self, messages: list[dict[str, str]], *, max_tokens: int | None = None
+    ) -> Iterator[str]:
+        """Yield content tokens incrementally."""
+        ...  # pragma: no cover
+
 
 @dataclass(frozen=True)
 class LLMClientSettings:
@@ -79,6 +87,12 @@ class MockLLMClient:
         index = min(self.calls - 1, len(self.responses) - 1)
         return self.responses[index]
 
+    def stream_complete(self, messages: list[dict[str, str]], *, max_tokens: int | None = None) -> Iterator[str]:
+        content = self.complete(messages, max_tokens=max_tokens)
+        for char in content:
+            yield char
+            time.sleep(0.01)
+
 
 # ---------------------------------------------------------------------------
 # OpenAI-compatible client (real provider)
@@ -86,16 +100,7 @@ class MockLLMClient:
 
 
 class OpenAICompatibleLLMClient:
-    def __init__(
-        self,
-        *,
-        api_key: str,
-        base_url: str,
-        model: str,
-        timeout_seconds: float,
-        transport: httpx.BaseTransport | None = None,
-        http_client: httpx.Client | None = None,
-    ):
+    def __init__(self, *, api_key: str, base_url: str, model: str, timeout_seconds: float):
         if not api_key or not api_key.strip():
             raise LLMAuthError(
                 "LLM API key is required for OpenAI-compatible providers but was empty",
@@ -106,55 +111,42 @@ class OpenAICompatibleLLMClient:
         self.base_url = base_url.rstrip("/")
         self.model = model
         self.timeout_seconds = timeout_seconds
-        self._owns_http_client = http_client is None
-        self._transport = transport
-        self._http: httpx.Client | None = http_client
-
-    def _client(self) -> httpx.Client:
-        if self._http is None:
-            self._http = httpx.Client(
-                timeout=httpx.Timeout(self.timeout_seconds),
-                limits=httpx.Limits(max_keepalive_connections=10, max_connections=20),
-                transport=self._transport,
-                trust_env=False,
-            )
-        return self._http
 
     def complete(self, messages: list[dict[str, str]], *, max_tokens: int | None = None) -> str:
-        body = {
-            "model": self.model,
-            "messages": messages,
-            "response_format": {"type": "json_object"},
-            "temperature": 0.05,
-            "max_tokens": max_tokens or 1800,
-        }
+        body = json.dumps(
+            {
+                "model": self.model,
+                "messages": messages,
+                "response_format": {"type": "json_object"},
+                "temperature": 0.05,
+                "max_tokens": max_tokens or 1800,
+            }
+        ).encode("utf-8")
+        req = request.Request(
+            f"{self.base_url}/chat/completions",
+            data=body,
+            method="POST",
+            headers={
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            },
+        )
         try:
-            response = self._client().post(
-                f"{self.base_url}/chat/completions",
-                json=body,
-                headers={
-                    "Authorization": f"Bearer {self.api_key}",
-                    "Content-Type": "application/json",
-                },
-            )
-            # Raise for 4xx/5xx
-            self._check_response(response)
-            payload: dict[str, Any] = response.json()
-        except httpx.TimeoutException:
+            with request.urlopen(req, timeout=self.timeout_seconds) as response:
+                raw_response = response.read().decode("utf-8")
+                logger.debug("LLM raw response (first 500 chars): %s", raw_response[:500])
+                payload: dict[str, Any] = json.loads(raw_response)
+        except urllib_error.HTTPError as exc:
+            self._raise_http_error(exc)
+        except urllib_error.URLError as exc:
+            self._raise_url_error(exc)
+        except TimeoutError:
             raise LLMTimeoutError(
                 f"LLM request timed out after {self.timeout_seconds}s",
                 provider="openai-compatible",
                 detail=f"model={self.model} base_url={self.base_url}",
             )
-        except httpx.HTTPStatusError as exc:
-            self._raise_http_error(exc)
-        except httpx.RequestError as exc:
-            raise LLMConnectionError(
-                f"Cannot reach LLM endpoint: {exc}",
-                provider="openai-compatible",
-                detail=f"Check LLM_BASE_URL and network. base_url={self.base_url}",
-            ) from exc
-        except json.JSONDecodeError as exc:
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
             raise LLMResponseError(
                 f"LLM response was not valid JSON: {exc}",
                 provider="openai-compatible",
@@ -172,29 +164,54 @@ class OpenAICompatibleLLMClient:
             )
         return content
 
-    def close(self) -> None:
-        """Close the underlying HTTP client, releasing pooled connections."""
-        if self._owns_http_client and self._http is not None:
-            self._http.close()
+    def stream_complete(self, messages: list[dict[str, str]], *, max_tokens: int | None = None) -> Iterator[str]:
+        body = json.dumps(
+            {
+                "model": self.model,
+                "messages": messages,
+                "temperature": 0.05,
+                "max_tokens": max_tokens or 1800,
+                "stream": True,
+            }
+        ).encode("utf-8")
+        req = request.Request(
+            f"{self.base_url}/chat/completions",
+            data=body,
+            method="POST",
+            headers={
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            },
+        )
+        try:
+            with request.urlopen(req, timeout=self.timeout_seconds) as response:
+                for line in response:
+                    line = line.decode("utf-8").strip()
+                    if not line or not line.startswith("data: "):
+                        continue
+                    data = line[6:]
+                    if data == "[DONE]":
+                        break
+                    try:
+                        chunk = json.loads(data)
+                        delta = chunk.get("choices", [{}])[0].get("delta", {})
+                        content = delta.get("content")
+                        if content:
+                            yield content
+                    except (json.JSONDecodeError, IndexError, KeyError):
+                        logger.warning("Skipping malformed SSE chunk")
+                        continue
+        except (urllib_error.HTTPError, urllib_error.URLError, TimeoutError) as exc:
+            logger.warning("Streaming failed, falling back to non-streaming: %s", exc)
+            yield self.complete(messages, max_tokens=max_tokens)
 
     # ------------------------------------------------------------------
     # Error translation helpers
     # ------------------------------------------------------------------
 
-    def _check_response(self, response: httpx.Response) -> None:
-        """Check for HTTP errors (the httpx way — called before .json())."""
-        if response.status_code < 400:
-            return
-        exc = httpx.HTTPStatusError(
-            f"HTTP {response.status_code}",
-            request=response.request,
-            response=response,
-        )
-        self._raise_http_error(exc)
-
-    def _raise_http_error(self, exc: httpx.HTTPStatusError) -> None:
+    def _raise_http_error(self, exc: urllib_error.HTTPError) -> None:
         """Translate HTTP status codes into specific LLM errors."""
-        status = exc.response.status_code
+        status = exc.code
         if status == 401:
             raise LLMAuthError(
                 "LLM API key was rejected (HTTP 401 Unauthorized)",
@@ -229,6 +246,21 @@ class OpenAICompatibleLLMClient:
             f"Unexpected HTTP {status} from LLM provider",
             provider="openai-compatible",
             detail="Provider returned an unexpected HTTP status.",
+        ) from exc
+
+    def _raise_url_error(self, exc: urllib_error.URLError) -> None:
+        """Translate URL errors (network / DNS) into LLMConnectionError."""
+        reason = exc.reason
+        if isinstance(reason, TimeoutError):
+            raise LLMTimeoutError(
+                f"LLM request timed out after {self.timeout_seconds}s",
+                provider="openai-compatible",
+                detail=f"model={self.model} base_url={self.base_url}",
+            ) from exc
+        raise LLMConnectionError(
+            f"Cannot reach LLM endpoint: {reason}",
+            provider="openai-compatible",
+            detail=f"Check LLM_BASE_URL and network. base_url={self.base_url}",
         ) from exc
 
 

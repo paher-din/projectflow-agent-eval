@@ -11,7 +11,7 @@ from app.schemas.workspace_state import WorkspaceStateResponse
 
 
 def build_request(workspace_state: WorkspaceStateResponse) -> AgentModuleRequest:
-    start = date.today()
+    start = _current_date(workspace_state)
     deadline = project_deadline_or_today(workspace_state)
     end = deadline if deadline >= start else start
     project_name = project_name_or_default(workspace_state)
@@ -66,3 +66,12 @@ def build_request(workspace_state: WorkspaceStateResponse) -> AgentModuleRequest
             "reason": f"fallback 根据“{project_name}”的截止日期生成中文阶段计划，并保持在可确认范围内。",
         },
     )
+
+
+def _current_date(workspace_state: WorkspaceStateResponse) -> date:
+    if workspace_state.current_date:
+        try:
+            return date.fromisoformat(workspace_state.current_date)
+        except ValueError:
+            pass
+    return date.today()

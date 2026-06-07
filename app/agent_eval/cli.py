@@ -94,6 +94,10 @@ def _build_parser() -> argparse.ArgumentParser:
     compare_parser.add_argument("candidate")
     compare_parser.add_argument("--output-dir", default=None)
 
+    # sync
+    sync_parser = sub.add_parser("sync", help="Sync agent code from ProjectFlow")
+    sync_parser.add_argument("--projectflow-root", default="")
+
     # config
     config_parser = sub.add_parser("config", help="Manage real-mode LLM config")
     config_sub = config_parser.add_subparsers(dest="config_command")
@@ -146,6 +150,8 @@ def _add_run_options(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--cache-dir", default=str(DEFAULT_CACHE_DIR))
     parser.add_argument("--no-cache", action="store_true")
     parser.add_argument("--projectflow-root", default="")
+    parser.add_argument("--sync", dest="sync", action="store_true", default=True)
+    parser.add_argument("--no-sync", dest="sync", action="store_false")
 
 
 def _dispatch(args: argparse.Namespace) -> int:
@@ -153,6 +159,12 @@ def _dispatch(args: argparse.Namespace) -> int:
         return list_cases(args.fixtures)
     if args.command == "case" and args.case_command == "show":
         return show_case(args.case_id, args.fixtures)
+    if args.command == "sync":
+        from app.agent_eval.commands.sync import print_sync_result, sync_agent_code
+
+        meta = sync_agent_code(projectflow_root=args.projectflow_root)
+        print_sync_result(meta)
+        return 0
     if args.command == "run" and args.run_command:
         from app.agent_eval.commands.runs import run_benchmark
 
@@ -172,6 +184,7 @@ def _dispatch(args: argparse.Namespace) -> int:
             no_cache=args.no_cache,
             run_ref=getattr(args, "run_ref", ""),
             projectflow_root=args.projectflow_root,
+            sync=getattr(args, "sync", True),
         )
     if args.command == "report" and args.report_command:
         from app.agent_eval.commands.reports import show_report
@@ -243,8 +256,9 @@ def main(argv: list[str] | None = None) -> int:
     # Patch app.__path__ before any app.agent.* lazy import happens.
     # Must run after top-level imports (so "app" is in sys.modules) but
     # before _dispatch() where run_benchmark -> run_suite -> CoordinatorAgent.
+    # Skip for "sync" command — it copies files directly, no import patching needed.
     projectflow_root = _resolve_projectflow_root(selected_argv)
-    if projectflow_root:
+    if projectflow_root and "sync" not in selected_argv:
         _patch_app_path(projectflow_root)
 
     if _is_legacy_runner_invocation(selected_argv):

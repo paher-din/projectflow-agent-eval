@@ -23,6 +23,7 @@ def run_benchmark(
     no_cache: bool = False,
     run_ref: str = "",
     projectflow_root: str = "",
+    sync: bool = True,
 ) -> int:
     mode = "real" if action == "real" else "mock"
     selected_model = model or ("stub" if mode == "mock" else "")
@@ -33,6 +34,18 @@ def run_benchmark(
 
     if mode == "real":
         config_commands.ensure_real_config()
+        if sync:
+            import os
+            from app.agent_eval.commands.sync import print_sync_result, sync_agent_code
+
+            pf_root = projectflow_root or os.getenv("PROJECTFLOW_ROOT", "")
+            if pf_root:
+                print("Syncing agent code from ProjectFlow...")
+                meta = sync_agent_code(projectflow_root=pf_root)
+                print_sync_result(meta)
+                print()
+            else:
+                print("Skipping sync (no --projectflow-root or PROJECTFLOW_ROOT set)")
 
     reports, summary = run_suite(
         fixtures,

@@ -112,10 +112,13 @@
           "status": "done",
           "priority": "high",
           "estimated_hours": 9,
-          "assignee_id": "user-2",
-          "depends_on": [],
-          "done_criteria": "任务 1 完成标准",
-          "description": "已有任务的描述 1"
+          "description": "已有任务的描述 1",
+          "owner_user_id": "user-2",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "任务 1 完成标准"
+          ]
         },
         {
           "id": "task-2",
@@ -124,10 +127,13 @@
           "status": "done",
           "priority": "high",
           "estimated_hours": 10,
-          "assignee_id": "user-3",
-          "depends_on": [],
-          "done_criteria": "任务 2 完成标准",
-          "description": "已有任务的描述 2"
+          "description": "已有任务的描述 2",
+          "owner_user_id": "user-3",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "任务 2 完成标准"
+          ]
         },
         {
           "id": "task-3",
@@ -136,10 +142,13 @@
           "status": "done",
           "priority": "high",
           "estimated_hours": 11,
-          "assignee_id": "user-1",
-          "depends_on": [],
-          "done_criteria": "任务 3 完成标准",
-          "description": "已有任务的描述 3"
+          "description": "已有任务的描述 3",
+          "owner_user_id": "user-1",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "任务 3 完成标准"
+          ]
         },
         {
           "id": "task-4",
@@ -148,10 +157,13 @@
           "status": "done",
           "priority": "high",
           "estimated_hours": 12,
-          "assignee_id": "user-2",
-          "depends_on": [],
-          "done_criteria": "任务 4 完成标准",
-          "description": "已有任务的描述 4"
+          "description": "已有任务的描述 4",
+          "owner_user_id": "user-2",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "任务 4 完成标准"
+          ]
         },
         {
           "id": "task-5",
@@ -160,10 +172,13 @@
           "status": "done",
           "priority": "high",
           "estimated_hours": 13,
-          "assignee_id": "user-3",
-          "depends_on": [],
-          "done_criteria": "任务 5 完成标准",
-          "description": "已有任务的描述 5"
+          "description": "已有任务的描述 5",
+          "owner_user_id": "user-3",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "任务 5 完成标准"
+          ]
         },
         {
           "id": "task-6",
@@ -172,10 +187,13 @@
           "status": "in_progress",
           "priority": "high",
           "estimated_hours": 14,
-          "assignee_id": "user-1",
-          "depends_on": [],
-          "done_criteria": "任务 6 完成标准",
-          "description": "已有任务的描述 6"
+          "description": "已有任务的描述 6",
+          "owner_user_id": "user-1",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "任务 6 完成标准"
+          ]
         },
         {
           "id": "task-7",
@@ -184,10 +202,13 @@
           "status": "in_progress",
           "priority": "high",
           "estimated_hours": 15,
-          "assignee_id": "user-2",
-          "depends_on": [],
-          "done_criteria": "任务 7 完成标准",
-          "description": "已有任务的描述 7"
+          "description": "已有任务的描述 7",
+          "owner_user_id": "user-2",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "任务 7 完成标准"
+          ]
         },
         {
           "id": "task-8",
@@ -196,10 +217,13 @@
           "status": "in_progress",
           "priority": "high",
           "estimated_hours": 8,
-          "assignee_id": "user-3",
-          "depends_on": [],
-          "done_criteria": "任务 8 完成标准",
-          "description": "已有任务的描述 8"
+          "description": "已有任务的描述 8",
+          "owner_user_id": "user-3",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "任务 8 完成标准"
+          ]
         },
         {
           "id": "task-9",
@@ -208,10 +232,13 @@
           "status": "in_progress",
           "priority": "medium",
           "estimated_hours": 9,
-          "assignee_id": "user-1",
-          "depends_on": [],
-          "done_criteria": "任务 9 完成标准",
-          "description": "已有任务的描述 9"
+          "description": "已有任务的描述 9",
+          "owner_user_id": "user-1",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "任务 9 完成标准"
+          ]
         },
         {
           "id": "task-10",
@@ -220,10 +247,13 @@
           "status": "in_progress",
           "priority": "medium",
           "estimated_hours": 10,
-          "assignee_id": "user-2",
-          "depends_on": [],
-          "done_criteria": "任务 10 完成标准",
-          "description": "已有任务的描述 10"
+          "description": "已有任务的描述 10",
+          "owner_user_id": "user-2",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "任务 10 完成标准"
+          ]
         },
         {
           "id": "task-11",
@@ -232,10 +262,13 @@
           "status": "todo",
           "priority": "medium",
           "estimated_hours": 11,
-          "assignee_id": "user-3",
-          "depends_on": [],
-          "done_criteria": "任务 11 完成标准",
-          "description": "已有任务的描述 11"
+          "description": "已有任务的描述 11",
+          "owner_user_id": "user-3",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "任务 11 完成标准"
+          ]
         },
         {
           "id": "task-12",
@@ -244,10 +277,13 @@
           "status": "todo",
           "priority": "medium",
           "estimated_hours": 12,
-          "assignee_id": "user-1",
-          "depends_on": [],
-          "done_criteria": "任务 12 完成标准",
-          "description": "已有任务的描述 12"
+          "description": "已有任务的描述 12",
+          "owner_user_id": "user-1",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "任务 12 完成标准"
+          ]
         },
         {
           "id": "task-13",
@@ -256,10 +292,13 @@
           "status": "todo",
           "priority": "medium",
           "estimated_hours": 13,
-          "assignee_id": "user-2",
-          "depends_on": [],
-          "done_criteria": "任务 13 完成标准",
-          "description": "已有任务的描述 13"
+          "description": "已有任务的描述 13",
+          "owner_user_id": "user-2",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "任务 13 完成标准"
+          ]
         },
         {
           "id": "task-14",
@@ -268,10 +307,13 @@
           "status": "todo",
           "priority": "medium",
           "estimated_hours": 14,
-          "assignee_id": "user-3",
-          "depends_on": [],
-          "done_criteria": "任务 14 完成标准",
-          "description": "已有任务的描述 14"
+          "description": "已有任务的描述 14",
+          "owner_user_id": "user-3",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "任务 14 完成标准"
+          ]
         },
         {
           "id": "task-15",
@@ -280,10 +322,13 @@
           "status": "todo",
           "priority": "medium",
           "estimated_hours": 15,
-          "assignee_id": "user-1",
-          "depends_on": [],
-          "done_criteria": "任务 15 完成标准",
-          "description": "已有任务的描述 15"
+          "description": "已有任务的描述 15",
+          "owner_user_id": "user-1",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "任务 15 完成标准"
+          ]
         }
       ],
       "checkin_cycles": [],

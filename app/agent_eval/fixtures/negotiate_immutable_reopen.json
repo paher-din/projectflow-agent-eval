@@ -126,10 +126,13 @@
           "status": "in_progress",
           "priority": "medium",
           "estimated_hours": 0,
-          "assignee_id": "user-2",
-          "depends_on": [],
-          "done_criteria": "N/A",
-          "description": "仅用于让 mock output 中的 task-1 引用合法化"
+          "description": "仅用于让 mock output 中的 task-1 引用合法化",
+          "owner_user_id": "user-2",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "N/A"
+          ]
         },
         {
           "id": "task-11",
@@ -138,10 +141,13 @@
           "status": "done",
           "priority": "high",
           "estimated_hours": 16,
-          "assignee_id": "user-1",
-          "depends_on": [],
-          "done_criteria": "API 可用",
-          "description": "课程搜索接口"
+          "description": "课程搜索接口",
+          "owner_user_id": "user-1",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "API 可用"
+          ]
         },
         {
           "id": "task-12",
@@ -150,10 +156,13 @@
           "status": "done",
           "priority": "high",
           "estimated_hours": 12,
-          "assignee_id": "user-2",
-          "depends_on": [],
-          "done_criteria": "页面可用",
-          "description": "评价表单"
+          "description": "评价表单",
+          "owner_user_id": "user-2",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "页面可用"
+          ]
         },
         {
           "id": "task-13",
@@ -162,10 +171,13 @@
           "status": "in_progress",
           "priority": "high",
           "estimated_hours": 10,
-          "assignee_id": "user-1",
-          "depends_on": [],
-          "done_criteria": "响应时间 < 200ms",
-          "description": "索引调优"
+          "description": "索引调优",
+          "owner_user_id": "user-1",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "响应时间 < 200ms"
+          ]
         },
         {
           "id": "task-14",
@@ -174,10 +186,13 @@
           "status": "todo",
           "priority": "medium",
           "estimated_hours": 6,
-          "assignee_id": null,
-          "depends_on": [],
-          "done_criteria": "首屏加载 < 2s",
-          "description": "代码分割和懒加载"
+          "description": "代码分割和懒加载",
+          "owner_user_id": null,
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "首屏加载 < 2s"
+          ]
         }
       ],
       "checkin_cycles": [],
@@ -186,56 +201,58 @@
         {
           "id": "proposal-11",
           "task_id": "task-11",
-          "proposer_id": "user-1",
-          "assignee_id": "user-1",
           "reason": "小林是后端主力，已完成搜索 API",
-          "status": "accepted"
+          "status": "accepted",
+          "stage_id": "stage-12",
+          "recommended_owner_user_id": "user-1"
         },
         {
           "id": "proposal-12",
           "task_id": "task-12",
-          "proposer_id": "user-1",
-          "assignee_id": "user-2",
           "reason": "小张擅长前端，已完成评价页面",
-          "status": "accepted"
+          "status": "accepted",
+          "stage_id": "stage-12",
+          "recommended_owner_user_id": "user-1"
         },
         {
           "id": "proposal-13",
           "task_id": "task-13",
-          "proposer_id": "user-1",
-          "assignee_id": "user-1",
           "reason": "小林继续负责后端优化",
-          "status": "accepted"
+          "status": "accepted",
+          "stage_id": "stage-12",
+          "recommended_owner_user_id": "user-1"
         }
       ],
       "assignment_responses": [
         {
           "proposal_id": "proposal-11",
-          "responder_id": "user-1",
           "response": "accept",
-          "reason": ""
+          "reason": "",
+          "id": "aresp-proposal-11",
+          "user_id": "user-1"
         },
         {
           "proposal_id": "proposal-12",
-          "responder_id": "user-2",
           "response": "accept",
-          "reason": ""
+          "reason": "",
+          "id": "aresp-proposal-12",
+          "user_id": "user-2"
         },
         {
           "proposal_id": "proposal-13",
-          "responder_id": "user-1",
           "response": "accept",
-          "reason": ""
+          "reason": "",
+          "id": "aresp-proposal-13",
+          "user_id": "user-1"
         }
       ],
       "assignment_negotiations": [
         {
           "id": "neg-11",
-          "proposal_id": "proposal-11",
           "from_user_id": "user-1",
-          "to_user_id": "user-1",
-          "message": "确认接受，搜索 API 已完成",
-          "created_at": "2026-06-10T10:00:00+08:00"
+          "stage_id": "stage-12",
+          "desired_task_id": "task-11",
+          "status": "accepted"
         }
       ],
       "resources": []

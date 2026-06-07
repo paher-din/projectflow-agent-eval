@@ -112,10 +112,13 @@
           "status": "in_progress",
           "priority": "high",
           "estimated_hours": 16,
-          "assignee_id": "user-1",
-          "depends_on": [],
-          "done_criteria": "API 可用",
-          "description": "课程搜索接口"
+          "description": "课程搜索接口",
+          "owner_user_id": "user-1",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "API 可用"
+          ]
         },
         {
           "id": "task-2",
@@ -124,30 +127,36 @@
           "status": "in_progress",
           "priority": "high",
           "estimated_hours": 12,
-          "assignee_id": "user-2",
-          "depends_on": [],
-          "done_criteria": "页面可用",
-          "description": "评价表单"
+          "description": "评价表单",
+          "owner_user_id": "user-2",
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "页面可用"
+          ]
         }
       ],
       "checkin_cycles": [
         {
           "id": "cycle-1",
-          "start_date": "2026-06-01",
-          "end_date": "2026-06-07",
-          "status": "closed"
+          "status": "closed",
+          "stage_id": "stage-1",
+          "cadence_days": 7,
+          "next_due_date": "2026-06-07"
         },
         {
           "id": "cycle-2",
-          "start_date": "2026-06-08",
-          "end_date": "2026-06-14",
-          "status": "closed"
+          "status": "closed",
+          "stage_id": "stage-1",
+          "cadence_days": 7,
+          "next_due_date": "2026-06-14"
         },
         {
           "id": "cycle-3",
-          "start_date": "2026-06-15",
-          "end_date": "2026-06-21",
-          "status": "active"
+          "status": "active",
+          "stage_id": "stage-1",
+          "cadence_days": 7,
+          "next_due_date": "2026-06-21"
         }
       ],
       "checkin_responses": [
@@ -156,64 +165,48 @@
           "cycle_id": "cycle-1",
           "user_id": "user-1",
           "task_id": "task-1",
-          "progress": "40%",
-          "blockers": [],
-          "plan": "继续开发",
-          "created_at": "2026-06-05T09:00:00+08:00"
+          "what_done": "40%",
+          "blocker": null
         },
         {
           "id": "resp-2",
           "cycle_id": "cycle-1",
           "user_id": "user-2",
           "task_id": "task-2",
-          "progress": "30%",
-          "blockers": [],
-          "plan": "加速开发",
-          "created_at": "2026-06-05T09:30:00+08:00"
+          "what_done": "30%",
+          "blocker": null
         },
         {
           "id": "resp-3",
           "cycle_id": "cycle-2",
           "user_id": "user-1",
           "task_id": "task-1",
-          "progress": "55%",
-          "blockers": [
-            "数据库查询性能不达标"
-          ],
-          "plan": "优化索引",
-          "created_at": "2026-06-12T09:00:00+08:00"
+          "what_done": "55%",
+          "blocker": "数据库查询性能不达标"
         },
         {
           "id": "resp-4",
           "cycle_id": "cycle-2",
           "user_id": "user-2",
           "task_id": "task-2",
-          "progress": "50%",
-          "blockers": [],
-          "plan": "继续开发",
-          "created_at": "2026-06-12T09:30:00+08:00"
+          "what_done": "50%",
+          "blocker": null
         },
         {
           "id": "resp-5",
           "cycle_id": "cycle-3",
           "user_id": "user-1",
           "task_id": "task-1",
-          "progress": "65%",
-          "blockers": [
-            "数据库查询性能不达标——已持续 2 周"
-          ],
-          "plan": "等待数据库优化",
-          "created_at": "2026-06-19T09:00:00+08:00"
+          "what_done": "65%",
+          "blocker": "数据库查询性能不达标——已持续 2 周"
         },
         {
           "id": "resp-6",
           "cycle_id": "cycle-3",
           "user_id": "user-2",
           "task_id": "task-2",
-          "progress": "60%",
-          "blockers": [],
-          "plan": "继续开发",
-          "created_at": "2026-06-19T09:30:00+08:00"
+          "what_done": "60%",
+          "blocker": null
         }
       ],
       "assignment_proposals": [],

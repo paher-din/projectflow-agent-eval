@@ -547,6 +547,13 @@ def compare_runs(
                 f"Core module '{module}' score dropped by {abs(cand_mod - base_mod):.3f} (requires manual review)"
             )
 
+    baseline_commit = baseline_summary.config.projectflow_git_commit if baseline_summary.config else ""
+    candidate_commit = candidate_summary.config.projectflow_git_commit if candidate_summary.config else ""
+    # Strip +dirty suffix for comparison
+    base_commit_clean = baseline_commit.replace("+dirty", "")
+    cand_commit_clean = candidate_commit.replace("+dirty", "")
+    version_changed = bool(base_commit_clean and cand_commit_clean and base_commit_clean != cand_commit_clean)
+
     return DiffReport(
         baseline_run_id=baseline_summary.run_id,
         candidate_run_id=candidate_summary.run_id,
@@ -558,6 +565,9 @@ def compare_runs(
         entries=entries,
         regression_passed=regression_passed,
         regression_notes=regression_notes,
+        baseline_commit=baseline_commit,
+        candidate_commit=candidate_commit,
+        version_changed=version_changed,
     )
 
 

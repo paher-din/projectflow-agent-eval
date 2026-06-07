@@ -112,10 +112,13 @@
           "status": "todo",
           "priority": "high",
           "estimated_hours": 16,
-          "assignee_id": null,
-          "depends_on": [],
-          "done_criteria": "API 可用",
-          "description": "课程搜索接口"
+          "description": "课程搜索接口",
+          "owner_user_id": null,
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "API 可用"
+          ]
         },
         {
           "id": "task-2",
@@ -124,10 +127,13 @@
           "status": "todo",
           "priority": "high",
           "estimated_hours": 12,
-          "assignee_id": null,
-          "depends_on": [],
-          "done_criteria": "页面可用",
-          "description": "评价表单和提交逻辑"
+          "description": "评价表单和提交逻辑",
+          "owner_user_id": null,
+          "can_cut": false,
+          "dependency_ids": [],
+          "acceptance_criteria": [
+            "页面可用"
+          ]
         }
       ],
       "checkin_cycles": [],
@@ -136,32 +142,34 @@
         {
           "id": "proposal-1",
           "task_id": "task-1",
-          "proposer_id": "user-1",
-          "assignee_id": "user-1",
           "reason": "小林擅长后端，适合实现搜索 API",
-          "status": "accepted"
+          "status": "accepted",
+          "stage_id": "stage-1",
+          "recommended_owner_user_id": "user-1"
         },
         {
           "id": "proposal-2",
           "task_id": "task-2",
-          "proposer_id": "user-1",
-          "assignee_id": "user-2",
           "reason": "小张擅长前端，适合实现评价页面",
-          "status": "accepted"
+          "status": "accepted",
+          "stage_id": "stage-1",
+          "recommended_owner_user_id": "user-1"
         }
       ],
       "assignment_responses": [
         {
           "proposal_id": "proposal-1",
-          "responder_id": "user-1",
           "response": "accept",
-          "reason": ""
+          "reason": "",
+          "id": "aresp-proposal-1",
+          "user_id": "user-1"
         },
         {
           "proposal_id": "proposal-2",
-          "responder_id": "user-2",
           "response": "accept",
-          "reason": ""
+          "reason": "",
+          "id": "aresp-proposal-2",
+          "user_id": "user-2"
         }
       ],
       "assignment_negotiations": [],
