@@ -48,6 +48,23 @@ projectflow-agent-eval run mock
 
 The lower-level runner module remains available for direct development use, but agents should prefer `pfae`.
 
+### First Real-Mode Setup
+
+For real LLM runs, configure the evaluated Agent model and auxiliary judge model once:
+
+```powershell
+pfae config init
+pfae config show
+```
+
+The config is stored outside this repository in your user config directory. API keys are masked in `config show` output and must not be committed.
+
+After setup:
+
+```powershell
+pfae run real
+```
+
 ## Run Offline Benchmark
 
 ```powershell
@@ -69,4 +86,3 @@ The lower-level runner module remains available for direct development use, but 
 ## Maintenance Boundary
 
 This repository is maintained as a standalone benchmark tool. Changes to ProjectFlow product behavior should live in the main ProjectFlow repository. Changes to benchmark fixtures, assertions, judge parsing, reporting, or benchmark runtime should live here.
-

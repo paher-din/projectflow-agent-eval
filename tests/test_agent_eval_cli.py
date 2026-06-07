@@ -227,3 +227,52 @@ def test_cli_compare_dispatches(monkeypatch: pytest.MonkeyPatch, tmp_path: Path)
     )
 
     assert main(["compare", str(baseline), str(candidate)]) == 0
+
+
+def test_cli_config_path_dispatches(monkeypatch: pytest.MonkeyPatch) -> None:
+    import app.agent_eval.commands.config as config_commands
+    monkeypatch.setattr(config_commands, "config_path_command", lambda **kwargs: 0)
+
+    assert main(["config", "path"]) == 0
+
+
+def test_cli_config_init_dispatches(monkeypatch: pytest.MonkeyPatch) -> None:
+    import app.agent_eval.commands.config as config_commands
+    monkeypatch.setattr(config_commands, "config_init", lambda **kwargs: 0)
+
+    assert main(["config", "init"]) == 0
+
+
+def test_cli_config_show_dispatches(monkeypatch: pytest.MonkeyPatch) -> None:
+    import app.agent_eval.commands.config as config_commands
+    monkeypatch.setattr(config_commands, "config_show", lambda **kwargs: 0)
+
+    assert main(["config", "show"]) == 0
+
+
+def test_run_real_ensures_config_before_runner(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls: list[str] = []
+
+    import app.agent_eval.commands.config as config_commands
+    monkeypatch.setattr(config_commands, "ensure_real_config", lambda **kwargs: calls.append("config"))
+
+    def fake_run_suite(fixtures: str, **kwargs: object) -> tuple[list[object], object]:
+        calls.append("run")
+
+        class Summary:
+            run_id = "run-1"
+            model = "model"
+            cases_passed = 1
+            cases_total = 1
+            average_score = 1.0
+            hard_failure_count = 0
+            duration_seconds = 0.1
+            cases_failed = 0
+            cases_judge_failed = 0
+
+        return [], Summary()
+
+    monkeypatch.setattr(run_commands, "run_suite", fake_run_suite)
+
+    assert run_commands.run_benchmark("real") == 0
+    assert calls == ["config", "run"]

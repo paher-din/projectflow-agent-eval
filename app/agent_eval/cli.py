@@ -50,6 +50,13 @@ def _build_parser() -> argparse.ArgumentParser:
     compare_parser.add_argument("candidate")
     compare_parser.add_argument("--output-dir", default=None)
 
+    # config
+    config_parser = sub.add_parser("config", help="Manage real-mode LLM config")
+    config_sub = config_parser.add_subparsers(dest="config_command")
+    config_sub.add_parser("init", help="Create or overwrite user config")
+    config_sub.add_parser("show", help="Show masked user config")
+    config_sub.add_parser("path", help="Show user config path")
+
     return parser
 
 
@@ -112,6 +119,15 @@ def _dispatch(args: argparse.Namespace) -> int:
         return compare_runs_command(
             args.baseline, args.candidate, output_dir=args.output_dir
         )
+    if args.command == "config" and args.config_command:
+        from app.agent_eval.commands import config as config_commands
+
+        if args.config_command == "init":
+            return config_commands.config_init()
+        if args.config_command == "show":
+            return config_commands.config_show()
+        if args.config_command == "path":
+            return config_commands.config_path_command()
     raise CommandError("No command selected. Run `pfae --help`.")
 
 

@@ -19,6 +19,16 @@ pfae run retry-errors latest
 
 Use `mock` when credentials are unavailable or the user only wants a local sanity check.
 
+## Configure Real Models
+
+```powershell
+pfae config path
+pfae config init
+pfae config show
+```
+
+`pfae run real` starts setup automatically when no environment or user config exists.
+
 ## Read Reports
 
 ```powershell

@@ -15,6 +15,10 @@ Use this skill when the user asks to run ProjectFlow AgentEval, benchmark the Pr
 4. Use `pfae diagnose latest` before proposing fixes for benchmark failures.
 5. Use `pfae compare <baseline> <candidate>` for regression checks.
 
+## Real-Mode Setup
+
+When real mode lacks provider configuration, run `pfae config init`. Do not ask the user to put keys in `.env` unless they explicitly prefer that. Use `pfae config show` to confirm configured model names; never display full API keys.
+
 ## Safety Boundaries
 
 - Do not edit `.env`, keys, tokens, CI/CD configuration, or provider credentials.

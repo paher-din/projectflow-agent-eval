@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from app.agent_eval.commands import config as config_commands
 from app.agent_eval.runner import DEFAULT_CACHE_DIR, run_suite
 
 
@@ -28,6 +29,9 @@ def run_benchmark(
     resume_from = run_ref if action == "resume" else ""
     retry_failed_from = run_ref if action == "retry-failed" else ""
     retry_errors_from = run_ref if action == "retry-errors" else ""
+
+    if mode == "real":
+        config_commands.ensure_real_config()
 
     reports, summary = run_suite(
         fixtures,
