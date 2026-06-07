@@ -6,7 +6,10 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
-output/
+output/*
+!output/agent-eval/
+output/agent-eval/*
+!output/agent-eval/HISTORY.md
 dist/
 build/
 *.egg-info/
